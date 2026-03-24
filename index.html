@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcHub — 80+ Free Online Calculators & Tools</title>
+<meta name="description" content="Free online calculators and tools: financial, health, math, unit converters, developer tools, and more. All in one place, no sign-up required.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c26;
+    --border: #2a2a3a;
+    --accent: #7c6aff;
+    --accent2: #ff6a9b;
+    --accent3: #6affd4;
+    --text: #e8e8f0;
+    --muted: #6b6b88;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+  }
+  .search-bar {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-bar:focus { border-color: var(--accent); }
+  .search-bar::placeholder { color: var(--muted); }
+
+  /* LAYOUT */
+  .container { display: flex; height: calc(100vh - 57px); }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .cat-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px 4px;
+  }
+  .tool-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .tool-btn:hover { background: var(--surface2); color: var(--accent); }
+  .tool-btn.active { background: var(--surface2); color: var(--accent); border-left-color: var(--accent); }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+  }
+  .main::-webkit-scrollbar { width: 6px; }
+  .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .tool-panel { display: none; animation: fadeIn 0.2s ease; }
+  .tool-panel.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .tool-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .tool-desc {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 28px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 560px;
+  }
+
+  /* FORM ELEMENTS */
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  input[type=number], input[type=text], input[type=date], select, textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  select option { background: var(--surface2); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .row { display: flex; gap: 12px; }
+  .row .field { flex: 1; }
+
+  /* BUTTON */
+  .btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 24px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 4px;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn:active { transform: scale(0.97); }
+  .btn-outline {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+
+  /* RESULT */
+  .result {
+    margin-top: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.8;
+    display: none;
+  }
+  .result.show { display: block; }
+  .result-main {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 8px;
+  }
+  .result-row { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+  .result-row span:last-child { color: var(--text); }
+
+  /* HOME GRID */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    max-width: 900px;
+  }
+  .home-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .home-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .home-card-icon { font-size: 22px; margin-bottom: 8px; }
+  .home-card-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; }
+  .home-card-cat { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* SPECIAL LAYOUTS */
+  .calc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 12px; }
+  .calc-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .calc-btn:hover { background: var(--border); }
+  .calc-btn.op { color: var(--accent); }
+  .calc-btn.eq { background: var(--accent); color: #fff; grid-column: span 2; }
+  .calc-btn.clear { color: var(--accent2); }
+  .calc-display {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: right;
+    font-size: 28px;
+    font-family: 'Syne', sans-serif;
+    margin-bottom: 8px;
+    min-height: 64px;
+    word-break: break-all;
+  }
+  .calc-expr { font-size: 12px; color: var(--muted); min-height: 18px; }
+
+  .spin-wheel-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  canvas { border-radius: 50%; }
+
+  .todo-list { list-style: none; margin-top: 12px; }
+  .todo-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--surface2); border-radius: 8px; margin-bottom: 8px; font-size: 13px; }
+  .todo-item input[type=checkbox] { accent-color: var(--accent); width: 16px; height: 16px; }
+  .todo-item.done span { text-decoration: line-through; color: var(--muted); }
+  .todo-del { margin-left: auto; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+  .todo-del:hover { color: var(--accent2); }
+
+  .timer-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--accent3);
+    letter-spacing: 0.05em;
+    margin: 20px 0;
+  }
+  .timer-btns { display: flex; gap: 10px; justify-content: center; }
+
+  .typing-area {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    min-height: 80px;
+    color: var(--muted);
+  }
+  .typing-area span.correct { color: var(--accent3); }
+  .typing-area span.wrong { color: var(--accent2); background: rgba(255,106,155,0.15); }
+  .typing-area span.current { border-bottom: 2px solid var(--accent); }
+
+  .gradient-preview {
+    height: 80px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: all 0.3s;
+  }
+  .shadow-preview {
+    width: 100px;
+    height: 100px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin: 16px auto;
+    transition: box-shadow 0.2s;
+  }
+  .btn-preview-wrap { padding: 20px; text-align: center; }
+  .color-swatch { width: 40px; height: 40px; border-radius: 6px; border: 1px solid var(--border); display: inline-block; vertical-align: middle; margin-right: 8px; }
+
+  .dice-wrap { text-align: center; }
+  .dice-face { font-size: 80px; margin: 16px 0; display: inline-block; transition: transform 0.3s; }
+  .dice-face.rolling { animation: roll 0.3s ease; }
+  @keyframes roll { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-20deg)} 75%{transform:rotate(20deg)} }
+
+  .love-meter { margin-top: 12px; height: 20px; background: var(--surface2); border-radius: 10px; overflow: hidden; }
+  .love-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), #ff3d71); border-radius: 10px; transition: width 0.8s cubic-bezier(.34,1.56,.64,1); }
+
+  .pomodoro-mode { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+
+  code-out {
+    display: block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 12px;
+    word-break: break-all;
+    margin-top: 12px;
+    color: var(--accent3);
+  }
+
+  .no-result { display: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .sidebar { width: 180px; min-width: 180px; }
+    .main { padding: 20px 16px; }
+    .home-grid { grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
+  }
+  @media (max-width: 500px) {
+    .container { flex-direction: column; }
+    .sidebar { width: 100%; min-width: unset; height: auto; max-height: 200px; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">⚡ CalcHub</div>
+  <input class="search-bar" type="text" id="searchInput" placeholder="Search 80+ tools..." oninput="searchTools(this.value)">
+</header>
+
+<div class="container">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+// ─── TOOL DEFINITIONS ────────────────────────────────────────────────────────
+const TOOLS = [
+  // 🧮 BASIC CALCULATORS
+  { id:'simple-calc',    cat:'🧮 Basic',      name:'Simple Calculator' },
+  { id:'scientific',     cat:'🧮 Basic',      name:'Scientific Calculator' },
+  { id:'percentage',     cat:'🧮 Basic',      name:'Percentage Calculator' },
+  { id:'fraction',       cat:'🧮 Basic',      name:'Fraction Calculator' },
+  { id:'ratio',          cat:'🧮 Basic',      name:'Ratio Calculator' },
+  { id:'average',        cat:'🧮 Basic',      name:'Average Calculator' },
+  { id:'mean-median',    cat:'🧮 Basic',      name:'Mean / Median / Mode' },
+  { id:'std-dev',        cat:'🧮 Basic',      name:'Standard Deviation' },
+  { id:'random-num',     cat:'🧮 Basic',      name:'Random Number Generator' },
+  { id:'rounding',       cat:'🧮 Basic',      name:'Rounding Calculator' },
+  // 🔄 UNIT CONVERTERS
+  { id:'length',         cat:'🔄 Converters', name:'Length Converter' },
+  { id:'weight',         cat:'🔄 Converters', name:'Weight / Mass Converter' },
+  { id:'temperature',    cat:'🔄 Converters', name:'Temperature Converter' },
+  { id:'area',           cat:'🔄 Converters', name:'Area Converter' },
+  { id:'volume',         cat:'🔄 Converters', name:'Volume Converter' },
+  { id:'speed',          cat:'🔄 Converters', name:'Speed Converter' },
+  { id:'time-conv',      cat:'🔄 Converters', name:'Time Converter' },
+  { id:'energy',         cat:'🔄 Converters', name:'Energy Converter' },
+  { id:'power',          cat:'🔄 Converters', name:'Power Converter' },
+  { id:'pressure',       cat:'🔄 Converters', name:'Pressure Converter' },
+  { id:'data-storage',   cat:'🔄 Converters', name:'Data Storage Converter' },
+  { id:'angle',          cat:'🔄 Converters', name:'Angle Converter' },
+  { id:'fuel-eff',       cat:'🔄 Converters', name:'Fuel Efficiency Converter' },
+  // 💰 FINANCIAL
+  { id:'emi',            cat:'💰 Financial',  name:'EMI Calculator' },
+  { id:'loan',           cat:'💰 Financial',  name:'Loan Calculator' },
+  { id:'mortgage',       cat:'💰 Financial',  name:'Mortgage Calculator' },
+  { id:'interest',       cat:'💰 Financial',  name:'Interest Calculator' },
+  { id:'sip',            cat:'💰 Financial',  name:'SIP Calculator' },
+  { id:'invest-return',  cat:'💰 Financial',  name:'Investment Return' },
+  { id:'savings',        cat:'💰 Financial',  name:'Savings Calculator' },
+  { id:'retirement',     cat:'💰 Financial',  name:'Retirement Planner' },
+  { id:'gst',            cat:'💰 Financial',  name:'GST Calculator' },
+  { id:'income-tax',     cat:'💰 Financial',  name:'Income Tax Calculator' },
+  { id:'discount',       cat:'💰 Financial',  name:'Discount Calculator' },
+  { id:'profit-loss',    cat:'💰 Financial',  name:'Profit / Loss Calculator' },
+  { id:'inflation',      cat:'💰 Financial',  name:'Inflation Calculator' },
+  // 🧑‍⚕️ HEALTH
+  { id:'bmi',            cat:'🧑‍⚕️ Health',    name:'BMI Calculator' },
+  { id:'bmr',            cat:'🧑‍⚕️ Health',    name:'BMR Calculator' },
+  { id:'calorie',        cat:'🧑‍⚕️ Health',    name:'Calorie Calculator' },
+  { id:'body-fat',       cat:'🧑‍⚕️ Health',    name:'Body Fat Calculator' },
+  { id:'ideal-weight',   cat:'🧑‍⚕️ Health',    name:'Ideal Weight Calculator' },
+  { id:'water-intake',   cat:'🧑‍⚕️ Health',    name:'Water Intake Calculator' },
+  { id:'heart-rate',     cat:'🧑‍⚕️ Health',    name:'Heart Rate Calculator' },
+  { id:'due-date',       cat:'🧑‍⚕️ Health',    name:'Pregnancy Due Date' },
+  { id:'ovulation',      cat:'🧑‍⚕️ Health',    name:'Ovulation Calculator' },
+  // 📚 MATH / EDUCATION
+  { id:'quadratic',      cat:'📚 Math',       name:'Quadratic Calculator' },
+  { id:'log-calc',       cat:'📚 Math',       name:'Log Calculator' },
+  { id:'trig',           cat:'📚 Math',       name:'Trigonometry Calculator' },
+  { id:'probability',    cat:'📚 Math',       name:'Probability Calculator' },
+  { id:'permcomb',       cat:'📚 Math',       name:'Permutation & Combination' },
+  { id:'prime',          cat:'📚 Math',       name:'Prime Number Checker' },
+  { id:'lcm-gcd',        cat:'📚 Math',       name:'LCM / GCD Calculator' },
+  { id:'base-conv',      cat:'📚 Math',       name:'Binary / Decimal / Hex' },
+  // 💻 DEVELOPER TOOLS
+  { id:'password-gen',   cat:'💻 Dev Tools',  name:'Password Generator' },
+  { id:'uuid-gen',       cat:'💻 Dev Tools',  name:'UUID Generator' },
+  { id:'base64',         cat:'💻 Dev Tools',  name:'Base64 Encoder/Decoder' },
+  { id:'url-enc',        cat:'💻 Dev Tools',  name:'URL Encoder/Decoder' },
+  { id:'color-conv',     cat:'💻 Dev Tools',  name:'Color Code Converter' },
+  // 🎨 DESIGN TOOLS
+  { id:'color-picker',   cat:'🎨 Design',     name:'Color Picker' },
+  { id:'gradient-gen',   cat:'🎨 Design',     name:'Gradient Generator' },
+  { id:'box-shadow',     cat:'🎨 Design',     name:'Box Shadow Generator' },
+  { id:'css-button',     cat:'🎨 Design',     name:'CSS Button Generator' },
+  { id:'aspect-ratio',   cat:'🎨 Design',     name:'Aspect Ratio Calculator' },
+  // 📱 SOCIAL / INTERNET
+  { id:'yt-earnings',    cat:'📱 Social',     name:'YouTube Earnings Estimator' },
+  { id:'ig-engage',      cat:'📱 Social',     name:'Instagram Engagement' },
+  { id:'username-gen',   cat:'📱 Social',     name:'Username Generator' },
+  { id:'name-gen',       cat:'📱 Social',     name:'Random Name Generator' },
+  { id:'email-valid',    cat:'📱 Social',     name:'Email Validator' },
+  // ⚡ PRODUCTIVITY
+  { id:'todo',           cat:'⚡ Productivity',name:'To-Do List' },
+  { id:'countdown',      cat:'⚡ Productivity',name:'Countdown Timer' },
+  { id:'stopwatch',      cat:'⚡ Productivity',name:'Stopwatch' },
+  { id:'pomodoro',       cat:'⚡ Productivity',name:'Pomodoro Timer' },
+  // 🎮 FUN
+  { id:'typing-test',    cat:'🎮 Fun',        name:'Typing Speed Test' },
+  { id:'love-calc',      cat:'🎮 Fun',        name:'Love Calculator ❤️' },
+  { id:'dice-roller',    cat:'🎮 Fun',        name:'Dice Roller' },
+  { id:'random-picker',  cat:'🎮 Fun',        name:'Random Picker' },
+  { id:'spin-wheel',     cat:'🎮 Fun',        name:'Spin Wheel' },
+  // 🏗️ ENGINEERING
+  { id:'ohms-law',       cat:'🏗️ Engineering',name:"Ohm's Law Calculator" },
+  { id:'voltage',        cat:'🏗️ Engineering',name:'Voltage / Current Calc' },
+  { id:'force',          cat:'🏗️ Engineering',name:'Force Calculator' },
+  { id:'density',        cat:'🏗️ Engineering',name:'Density Calculator' },
+  { id:'pressure-sci',   cat:'🏗️ Engineering',name:'Pressure Calculator' },
+  { id:'work-energy',    cat:'🏗️ Engineering',name:'Work / Energy Calculator' },
+  { id:'motion',         cat:'🏗️ Engineering',name:'Physics Motion Calculator' },
+  // 🏠 REAL LIFE
+  { id:'age-calc',       cat:'🏠 Real Life',  name:'Age Calculator' },
+  { id:'date-diff',      cat:'🏠 Real Life',  name:'Date Difference' },
+  { id:'timezone',       cat:'🏠 Real Life',  name:'Time Zone Converter' },
+  { id:'tip-calc',       cat:'🏠 Real Life',  name:'Tip Calculator' },
+  { id:'split-bill',     cat:'🏠 Real Life',  name:'Split Bill Calculator' },
+  { id:'cooking-conv',   cat:'🏠 Real Life',  name:'Cooking Measurement' },
+  { id:'fuel-cost',      cat:'🏠 Real Life',  name:'Fuel Cost Calculator' },
+  { id:'travel-time',    cat:'🏠 Real Life',  name:'Travel Time Calculator' },
+];
+
+// ─── RENDER SIDEBAR ───────────────────────────────────────────────────────────
+function buildSidebar(filter='') {
+  const sidebar = document.getElementById('sidebar');
+  const filtered = filter ? TOOLS.filter(t => t.name.toLowerCase().includes(filter.toLowerCase()) || t.cat.toLowerCase().includes(filter.toLowerCase())) : TOOLS;
+  const cats = [...new Set(filtered.map(t=>t.cat))];
+  sidebar.innerHTML = '';
+  if(!filter){
+    const homeBtn = document.createElement('button');
+    homeBtn.className = 'tool-btn' + (currentTool==='home'?' active':'');
+    homeBtn.textContent = '🏠 Home';
+    homeBtn.onclick = () => showTool('home');
+    sidebar.appendChild(homeBtn);
+  }
+  cats.forEach(cat => {
+    const lbl = document.createElement('div');
+    lbl.className = 'cat-label';
+    lbl.textContent = cat;
+    sidebar.appendChild(lbl);
+    filtered.filter(t=>t.cat===cat).forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'tool-btn' + (currentTool===t.id?' active':'');
+      btn.textContent = t.name;
+      btn.onclick = () => showTool(t.id);
+      sidebar.appendChild(btn);
+    });
+  });
+}
+
+// ─── SHOW TOOL ────────────────────────────────────────────────────────────────
+let currentTool = 'home';
+function showTool(id) {
+  currentTool = id;
+  buildSidebar(document.getElementById('searchInput').value);
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  if(id === 'home') { renderHome(); return; }
+  const tool = TOOLS.find(t=>t.id===id);
+  if(!tool) return;
+  const html = getToolHTML(id, tool.name);
+  main.innerHTML = html;
+  afterRender(id);
+}
+
+function searchTools(val){
+  buildSidebar(val);
+  if(val){
+    const filtered = TOOLS.filter(t=>t.name.toLowerCase().includes(val.toLowerCase()));
+    if(filtered.length===1) showTool(filtered[0].id);
+  }
+}
+
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+function renderHome(){
+  const cats = [...new Set(TOOLS.map(t=>t.cat))];
+  const icons = {'🧮 Basic':'🧮','🔄 Converters':'🔄','💰 Financial':'💰','🧑‍⚕️ Health':'🧑‍⚕️','📚 Math':'📚','💻 Dev Tools':'💻','🎨 Design':'🎨','📱 Social':'📱','⚡ Productivity':'⚡','🎮 Fun':'🎮','🏗️ Engineering':'🏗️','🏠 Real Life':'🏠'};
+  let html = `<div class="tool-title">Welcome to CalcHub</div><div class="tool-desc">80+ free tools. Click any tool to get started.</div><div class="home-grid">`;
+  TOOLS.forEach(t=>{
+    html+=`<div class="home-card" onclick="showTool('${t.id}')"><div class="home-card-icon">${icons[t.cat]||'🔧'}</div><div class="home-card-name">${t.name}</div><div class="home-card-cat">${t.cat}</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('main').innerHTML=html;
+}
+
+// ─── TOOL HTML ────────────────────────────────────────────────────────────────
+function getToolHTML(id, name){
+  const wrap = (desc, body) => `<div class="tool-title">${name}</div><div class="tool-desc">${desc}</div><div class="card">${body}</div>`;
+  const res = (id2) => `<div class="result" id="${id2}"></div>`;
+  const btn = (label, fn) => `<button class="btn" onclick="${fn}">${label}</button>`;
+
+  switch(id){
+
+  // ── SIMPLE CALCULATOR
+  case 'simple-calc': return wrap('Basic arithmetic calculator.',`
+    <div class="calc-display"><div class="calc-expr" id="sc-expr"></div><div id="sc-disp">0</div></div>
+    <div class="calc-grid">
+      ${['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','clear','+']. map(k=>{
+        const cls = ['÷','×','−','+'].includes(k)?'op':k==='clear'?'clear':'';
+        return `<button class="calc-btn ${cls}" onclick="scKey('${k}')">${k==='clear'?'C':k}</button>`;
+      }).join('')}
+      <button class="calc-btn eq" onclick="scKey('=')">=</button>
+    </div>`);
+
+  // ── SCIENTIFIC CALCULATOR
+  case 'scientific': return wrap('Scientific calculator with trig, log and power functions.',`
+    <div class="calc-display"><div class="calc-expr" id="sci-expr"></div><div id="sci-disp">0</div></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px">
+      ${['sin','cos','tan','log','ln','√','x²','xʸ','π','e','(',')','7','8','9','÷','4','5','6','×','1','2','3','−','0','.','C','+'].map(k=>{
+        const cls=['sin','cos','tan','log','ln','√','x²','xʸ','π','e','(',')'].includes(k)?'op':'';
+        return `<button class="calc-btn ${cls}" style="font-size:12px" onclick="sciKey('${k}')">${k}</button>`;
+      }).join('')}
+      <button class="calc-btn eq" style="grid-column:span 2" onclick="sciKey('=')">=</button>
+    </div>`);
+
+  // ── PERCENTAGE
+  case 'percentage': return wrap('Calculate percentages in multiple ways.',`
+    <div class="field"><label>Mode</label>
+      <select id="pct-mode" onchange="pctMode()">
+        <option value="1">X% of Y</option>
+        <option value="2">X is what % of Y</option>
+        <option value="3">% Change from X to Y</option>
+        <option value="4">X increased/decreased by Y%</option>
+      </select>
+    </div>
+    <div class="row"><div class="field"><label id="pct-l1">Value X</label><input type="number" id="pct-a" placeholder="e.g. 20"></div>
+    <div class="field"><label id="pct-l2">Value Y</label><input type="number" id="pct-b" placeholder="e.g. 80"></div></div>
+    ${btn('Calculate','calcPct()')}${res('pct-res')}`);
+
+  // ── FRACTION
+  case 'fraction': return wrap('Add, subtract, multiply, divide fractions.',`
+    <div class="row">
+      <div class="field"><label>Numerator 1</label><input type="number" id="fn1" value="1"></div>
+      <div class="field"><label>Denominator 1</label><input type="number" id="fd1" value="2"></div>
+    </div>
+    <div class="field"><label>Operation</label>
+      <select id="fop"><option>+</option><option>−</option><option>×</option><option>÷</option></select>
+    </div>
+    <div class="row">
+      <div class="field"><label>Numerator 2</label><input type="number" id="fn2" value="1"></div>
+      <div class="field"><label>Denominator 2</label><input type="number" id="fd2" value="3"></div>
+    </div>
+    ${btn('Calculate','calcFraction()')}${res('frac-res')}`);
+
+  // ── RATIO
+  case 'ratio': return wrap('Simplify ratios and find missing values.',`
+    <div class="row">
+      <div class="field"><label>A</label><input type="number" id="ra" value="2"></div>
+      <div class="field"><label>B</label><input type="number" id="rb" value="6"></div>
+      <div class="field"><label>C (optional)</label><input type="number" id="rc" placeholder="find D"></div>
+    </div>
+    ${btn('Calculate','calcRatio()')}${res('ratio-res')}`);
+
+  // ── AVERAGE
+  case 'average': return wrap('Calculate average of a list of numbers.',`
+    <div class="field"><label>Numbers (comma-separated)</label><input type="text" id="avg-nums" placeholder="e.g. 10, 20, 30, 40"></div>
+    ${btn('Calculate','calcAvg()')}${res('avg-res')}`);
+
+  // ── MEAN MEDIAN MODE
+  case 'mean-median': return wrap('Calculate mean, median and mode.',`
+    <div class="field"><label>Numbers (comma-separated)</label><input type="text" id="mmm-nums" placeholder="e.g. 5, 3, 8, 3, 10"></div>
+    ${btn('Calculate','calcMMM()')}${res('mmm-res')}`);
+
+  // ── STD DEV
+  case 'std-dev': return wrap('Calculate standard deviation and variance.',`
+    <div class="field"><label>Numbers (comma-separated)</label><input type="text" id="sd-nums" placeholder="e.g. 2, 4, 4, 4, 5, 5, 7, 9"></div>
+    <div class="field"><label>Type</label><select id="sd-type"><option value="p">Population</option><option value="s">Sample</option></select></div>
+    ${btn('Calculate','calcSD()')}${res('sd-res')}`);
+
+  // ── RANDOM NUMBER
+  case 'random-num': return wrap('Generate random numbers.',`
+    <div class="row">
+      <div class="field"><label>Min</label><input type="number" id="rn-min" value="1"></div>
+      <div class="field"><label>Max</label><input type="number" id="rn-max" value="100"></div>
+      <div class="field"><label>Count</label><input type="number" id="rn-count" value="1" min="1" max="100"></div>
+    </div>
+    ${btn('Generate','genRandom()')}${res('rn-res')}`);
+
+  // ── ROUNDING
+  case 'rounding': return wrap('Round numbers to any decimal place.',`
+    <div class="field"><label>Number</label><input type="number" id="round-n" placeholder="e.g. 3.14159"></div>
+    <div class="field"><label>Decimal Places</label><input type="number" id="round-d" value="2" min="0" max="15"></div>
+    ${btn('Round','calcRound()')}${res('round-res')}`);
+
+  // ── UNIT CONVERTERS (generic template)
+  case 'length': return unitConvHTML('length','Length Converter',[
+    ['Millimeter','mm',0.001],['Centimeter','cm',0.01],['Meter','m',1],['Kilometer','km',1000],
+    ['Inch','in',0.0254],['Foot','ft',0.3048],['Yard','yd',0.9144],['Mile','mi',1609.344]]);
+  case 'weight': return unitConvHTML('weight','Weight Converter',[
+    ['Milligram','mg',0.000001],['Gram','g',0.001],['Kilogram','kg',1],['Tonne','t',1000],
+    ['Ounce','oz',0.0283495],['Pound','lb',0.453592],['Stone','st',6.35029]]);
+  case 'temperature': return wrap('Convert between temperature scales.',`
+    <div class="field"><label>Value</label><input type="number" id="temp-val" placeholder="Enter temperature" oninput="calcTemp()"></div>
+    <div class="field"><label>From</label><select id="temp-from" onchange="calcTemp()">
+      <option>Celsius</option><option>Fahrenheit</option><option>Kelvin</option></select></div>
+    <div class="result show" id="temp-res" style="display:block"></div>`);
+  case 'area': return unitConvHTML('area','Area Converter',[
+    ['sq mm','mm²',0.000001],['sq cm','cm²',0.0001],['sq m','m²',1],['sq km','km²',1000000],
+    ['sq ft','ft²',0.092903],['sq yd','yd²',0.836127],['acre','ac',4046.86],['hectare','ha',10000]]);
+  case 'volume': return unitConvHTML('volume','Volume Converter',[
+    ['Milliliter','ml',0.001],['Liter','L',1],['Cubic Meter','m³',1000],
+    ['Cup','cup',0.236588],['Pint','pt',0.473176],['Quart','qt',0.946353],['Gallon','gal',3.78541]]);
+  case 'speed': return unitConvHTML('speed','Speed Converter',[
+    ['m/s','m/s',1],['km/h','km/h',0.277778],['mph','mph',0.44704],['knot','kn',0.514444],['ft/s','ft/s',0.3048]]);
+  case 'time-conv': return unitConvHTML('time-conv','Time Converter',[
+    ['Millisecond','ms',0.001],['Second','s',1],['Minute','min',60],['Hour','hr',3600],
+    ['Day','day',86400],['Week','wk',604800],['Month','mo',2629800],['Year','yr',31557600]]);
+  case 'energy': return unitConvHTML('energy','Energy Converter',[
+    ['Joule','J',1],['Kilojoule','kJ',1000],['Calorie','cal',4.184],['Kilocalorie','kcal',4184],
+    ['Watt-hour','Wh',3600],['kWh','kWh',3600000],['BTU','BTU',1055.06]]);
+  case 'power': return unitConvHTML('power','Power Converter',[
+    ['Watt','W',1],['Kilowatt','kW',1000],['Megawatt','MW',1000000],
+    ['Horsepower','hp',745.7],['BTU/hr','BTU/hr',0.293071]]);
+  case 'pressure': return unitConvHTML('pressure','Pressure Converter',[
+    ['Pascal','Pa',1],['Kilopascal','kPa',1000],['Bar','bar',100000],
+    ['PSI','psi',6894.76],['Atmosphere','atm',101325],['mmHg','mmHg',133.322]]);
+  case 'data-storage': return unitConvHTML('data-storage','Data Storage Converter',[
+    ['Bit','b',1/8],['Byte','B',1],['Kilobyte','KB',1024],['Megabyte','MB',1048576],
+    ['Gigabyte','GB',1073741824],['Terabyte','TB',1099511627776],['Petabyte','PB',1.126e15]]);
+  case 'angle': return unitConvHTML('angle','Angle Converter',[
+    ['Degree','°',1],['Radian','rad',57.2958],['Gradian','grad',0.9],['Turn','turn',360]]);
+  case 'fuel-eff': return unitConvHTML('fuel-eff','Fuel Efficiency Converter',[
+    ['km/L','km/L',1],['L/100km','L/100km',null],['mpg (US)','mpg',2.35215],['mpg (UK)','mpg UK',2.82481]]);
+
+  // ── FINANCIAL
+  case 'emi': return wrap('Calculate monthly EMI for loans.',`
+    <div class="field"><label>Loan Amount (₹)</label><input type="number" id="emi-p" placeholder="e.g. 500000"></div>
+    <div class="row">
+      <div class="field"><label>Annual Interest Rate (%)</label><input type="number" id="emi-r" placeholder="e.g. 8.5"></div>
+      <div class="field"><label>Tenure (Months)</label><input type="number" id="emi-n" placeholder="e.g. 60"></div>
+    </div>
+    ${btn('Calculate EMI','calcEMI()')}${res('emi-res')}`);
+
+  case 'loan': return wrap('Full loan repayment breakdown.',`
+    <div class="field"><label>Principal Amount</label><input type="number" id="loan-p" placeholder="e.g. 100000"></div>
+    <div class="row">
+      <div class="field"><label>Annual Rate (%)</label><input type="number" id="loan-r" placeholder="e.g. 10"></div>
+      <div class="field"><label>Years</label><input type="number" id="loan-y" placeholder="e.g. 5"></div>
+    </div>
+    ${btn('Calculate','calcLoan()')}${res('loan-res')}`);
+
+  case 'mortgage': return wrap('Monthly mortgage payment calculator.',`
+    <div class="field"><label>Home Price</label><input type="number" id="mort-price" placeholder="e.g. 5000000"></div>
+    <div class="field"><label>Down Payment</label><input type="number" id="mort-down" placeholder="e.g. 1000000"></div>
+    <div class="row">
+      <div class="field"><label>Annual Rate (%)</label><input type="number" id="mort-r" placeholder="e.g. 8"></div>
+      <div class="field"><label>Loan Term (Years)</label><input type="number" id="mort-y" placeholder="e.g. 20"></div>
+    </div>
+    ${btn('Calculate','calcMortgage()')}${res('mort-res')}`);
+
+  case 'interest': return wrap('Simple and compound interest calculator.',`
+    <div class="field"><label>Principal</label><input type="number" id="int-p" placeholder="e.g. 10000"></div>
+    <div class="row">
+      <div class="field"><label>Rate (% per year)</label><input type="number" id="int-r" placeholder="e.g. 7"></div>
+      <div class="field"><label>Time (Years)</label><input type="number" id="int-t" placeholder="e.g. 3"></div>
+    </div>
+    <div class="field"><label>Compound Frequency</label>
+      <select id="int-freq"><option value="1">Yearly</option><option value="2">Half-Yearly</option><option value="4">Quarterly</option><option value="12">Monthly</option></select>
+    </div>
+    ${btn('Calculate','calcInterest()')}${res('int-res')}`);
+
+  case 'sip': return wrap('SIP (Systematic Investment Plan) returns calculator.',`
+    <div class="field"><label>Monthly Investment (₹)</label><input type="number" id="sip-m" placeholder="e.g. 5000"></div>
+    <div class="row">
+      <div class="field"><label>Expected Return (% p.a.)</label><input type="number" id="sip-r" placeholder="e.g. 12"></div>
+      <div class="field"><label>Time Period (Years)</label><input type="number" id="sip-y" placeholder="e.g. 10"></div>
+    </div>
+    ${btn('Calculate','calcSIP()')}${res('sip-res')}`);
+
+  case 'invest-return': return wrap('Calculate investment return and CAGR.',`
+    <div class="field"><label>Initial Investment</label><input type="number" id="ir-init" placeholder="e.g. 50000"></div>
+    <div class="field"><label>Final Value</label><input type="number" id="ir-final" placeholder="e.g. 90000"></div>
+    <div class="field"><label>Years</label><input type="number" id="ir-yr" placeholder="e.g. 5"></div>
+    ${btn('Calculate','calcIR()')}${res('ir-res')}`);
+
+  case 'savings': return wrap('Future value of regular savings.',`
+    <div class="field"><label>Monthly Savings</label><input type="number" id="sav-m" placeholder="e.g. 2000"></div>
+    <div class="row">
+      <div class="field"><label>Annual Rate (%)</label><input type="number" id="sav-r" placeholder="e.g. 6"></div>
+      <div class="field"><label>Years</label><input type="number" id="sav-y" placeholder="e.g. 10"></div>
+    </div>
+    ${btn('Calculate','calcSavings()')}${res('sav-res')}`);
+
+  case 'retirement': return wrap('How much you need to retire comfortably.',`
+    <div class="field"><label>Current Age</label><input type="number" id="ret-age" placeholder="e.g. 30"></div>
+    <div class="field"><label>Retirement Age</label><input type="number" id="ret-rage" placeholder="e.g. 60"></div>
+    <div class="field"><label>Monthly Expenses Today (₹)</label><input type="number" id="ret-exp" placeholder="e.g. 40000"></div>
+    <div class="row">
+      <div class="field"><label>Inflation Rate (%)</label><input type="number" id="ret-inf" value="6"></div>
+      <div class="field"><label>Expected Return (%)</label><input type="number" id="ret-ret" value="10"></div>
+    </div>
+    ${btn('Calculate','calcRetirement()')}${res('ret-res')}`);
+
+  case 'gst': return wrap('GST (Goods and Services Tax) calculator for India.',`
+    <div class="field"><label>Amount (₹)</label><input type="number" id="gst-amt" placeholder="e.g. 1000"></div>
+    <div class="field"><label>GST Rate (%)</label>
+      <select id="gst-rate"><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select>
+    </div>
+    <div class="field"><label>Type</label>
+      <select id="gst-type"><option value="excl">Exclusive (Add GST)</option><option value="incl">Inclusive (Extract GST)</option></select>
+    </div>
+    ${btn('Calculate','calcGST()')}${res('gst-res')}`);
+
+  case 'income-tax': return wrap('Estimate Indian income tax (FY 2024-25, New Regime).',`
+    <div class="field"><label>Annual Income (₹)</label><input type="number" id="tax-inc" placeholder="e.g. 800000"></div>
+    <div class="field"><label>Regime</label>
+      <select id="tax-regime"><option value="new">New Regime</option><option value="old">Old Regime</option></select>
+    </div>
+    ${btn('Calculate','calcTax()')}${res('tax-res')}`);
+
+  case 'discount': return wrap('Calculate discounted price and savings.',`
+    <div class="field"><label>Original Price</label><input type="number" id="disc-orig" placeholder="e.g. 1500"></div>
+    <div class="field"><label>Discount (%)</label><input type="number" id="disc-pct" placeholder="e.g. 20"></div>
+    ${btn('Calculate','calcDiscount()')}${res('disc-res')}`);
+
+  case 'profit-loss': return wrap('Calculate profit or loss.',`
+    <div class="field"><label>Cost Price</label><input type="number" id="pl-cp" placeholder="e.g. 500"></div>
+    <div class="field"><label>Selling Price</label><input type="number" id="pl-sp" placeholder="e.g. 650"></div>
+    ${btn('Calculate','calcPL()')}${res('pl-res')}`);
+
+  case 'inflation': return wrap('Calculate inflation-adjusted value.',`
+    <div class="field"><label>Initial Amount</label><input type="number" id="inf-amt" placeholder="e.g. 10000"></div>
+    <div class="row">
+      <div class="field"><label>Inflation Rate (%)</label><input type="number" id="inf-rate" placeholder="e.g. 6"></div>
+      <div class="field"><label>Years</label><input type="number" id="inf-yr" placeholder="e.g. 10"></div>
+    </div>
+    ${btn('Calculate','calcInflation()')}${res('inf-res')}`);
+
+  // ── HEALTH
+  case 'bmi': return wrap('Body Mass Index calculator.',`
+    <div class="row">
+      <div class="field"><label>Weight (kg)</label><input type="number" id="bmi-w" placeholder="e.g. 70"></div>
+      <div class="field"><label>Height (cm)</label><input type="number" id="bmi-h" placeholder="e.g. 175"></div>
+    </div>
+    ${btn('Calculate','calcBMI()')}${res('bmi-res')}`);
+
+  case 'bmr': return wrap('Basal Metabolic Rate — calories your body burns at rest.',`
+    <div class="row">
+      <div class="field"><label>Weight (kg)</label><input type="number" id="bmr-w" placeholder="70"></div>
+      <div class="field"><label>Height (cm)</label><input type="number" id="bmr-h" placeholder="175"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Age</label><input type="number" id="bmr-age" placeholder="25"></div>
+      <div class="field"><label>Gender</label><select id="bmr-g"><option>Male</option><option>Female</option></select></div>
+    </div>
+    ${btn('Calculate','calcBMR()')}${res('bmr-res')}`);
+
+  case 'calorie': return wrap('Daily calorie needs based on activity level.',`
+    <div class="row">
+      <div class="field"><label>Weight (kg)</label><input type="number" id="cal-w" placeholder="70"></div>
+      <div class="field"><label>Height (cm)</label><input type="number" id="cal-h" placeholder="175"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Age</label><input type="number" id="cal-age" placeholder="25"></div>
+      <div class="field"><label>Gender</label><select id="cal-g"><option>Male</option><option>Female</option></select></div>
+    </div>
+    <div class="field"><label>Activity Level</label>
+      <select id="cal-act">
+        <option value="1.2">Sedentary (little/no exercise)</option>
+        <option value="1.375">Lightly active (1-3 days/wk)</option>
+        <option value="1.55">Moderately active (3-5 days/wk)</option>
+        <option value="1.725">Very active (6-7 days/wk)</option>
+        <option value="1.9">Extra active (physical job)</option>
+      </select>
+    </div>
+    ${btn('Calculate','calcCalorie()')}${res('cal-res')}`);
+
+  case 'body-fat': return wrap('Estimate body fat percentage (US Navy method).',`
+    <div class="field"><label>Gender</label><select id="bf-g"><option>Male</option><option>Female</option></select></div>
+    <div class="field"><label>Height (cm)</label><input type="number" id="bf-h" placeholder="175"></div>
+    <div class="field"><label>Waist Circumference (cm)</label><input type="number" id="bf-waist" placeholder="80"></div>
+    <div class="field"><label>Neck Circumference (cm)</label><input type="number" id="bf-neck" placeholder="38"></div>
+    <div class="field"><label>Hip (cm, females only)</label><input type="number" id="bf-hip" placeholder="90"></div>
+    ${btn('Calculate','calcBodyFat()')}${res('bf-res')}`);
+
+  case 'ideal-weight': return wrap('Ideal body weight using multiple formulas.',`
+    <div class="row">
+      <div class="field"><label>Height (cm)</label><input type="number" id="iw-h" placeholder="175"></div>
+      <div class="field"><label>Gender</label><select id="iw-g"><option>Male</option><option>Female</option></select></div>
+    </div>
+    ${btn('Calculate','calcIdealWeight()')}${res('iw-res')}`);
+
+  case 'water-intake': return wrap('Daily water intake recommendation.',`
+    <div class="field"><label>Weight (kg)</label><input type="number" id="wi-w" placeholder="70"></div>
+    <div class="field"><label>Activity Level</label>
+      <select id="wi-act"><option value="1">Sedentary</option><option value="1.3">Moderate</option><option value="1.6">Active</option></select>
+    </div>
+    ${btn('Calculate','calcWater()')}${res('wi-res')}`);
+
+  case 'heart-rate': return wrap('Target heart rate zones for exercise.',`
+    <div class="field"><label>Age</label><input type="number" id="hr-age" placeholder="30"></div>
+    <div class="field"><label>Resting Heart Rate (bpm)</label><input type="number" id="hr-rest" placeholder="65"></div>
+    ${btn('Calculate','calcHR()')}${res('hr-res')}`);
+
+  case 'due-date': return wrap('Pregnancy due date calculator.',`
+    <div class="field"><label>First Day of Last Menstrual Period</label><input type="date" id="dd-lmp"></div>
+    ${btn('Calculate','calcDueDate()')}${res('dd-res')}`);
+
+  case 'ovulation': return wrap('Ovulation window calculator.',`
+    <div class="field"><label>First Day of Last Period</label><input type="date" id="ov-lmp"></div>
+    <div class="field"><label>Cycle Length (days)</label><input type="number" id="ov-cycle" value="28"></div>
+    ${btn('Calculate','calcOvulation()')}${res('ov-res')}`);
+
+  // ── MATH / EDUCATION
+  case 'quadratic': return wrap('Solve ax² + bx + c = 0',`
+    <div class="row">
+      <div class="field"><label>a</label><input type="number" id="qa" value="1"></div>
+      <div class="field"><label>b</label><input type="number" id="qb" value="-5"></div>
+      <div class="field"><label>c</label><input type="number" id="qc" value="6"></div>
+    </div>
+    ${btn('Solve','calcQuadratic()')}${res('quad-res')}`);
+
+  case 'log-calc': return wrap('Calculate logarithms.',`
+    <div class="field"><label>Value</label><input type="number" id="log-v" placeholder="e.g. 100"></div>
+    <div class="field"><label>Base</label>
+      <select id="log-base"><option value="10">Base 10 (log)</option><option value="e">Natural (ln)</option><option value="2">Base 2</option><option value="custom">Custom</option></select>
+    </div>
+    <div class="field"><label>Custom Base</label><input type="number" id="log-custom" placeholder="e.g. 3"></div>
+    ${btn('Calculate','calcLog()')}${res('log-res')}`);
+
+  case 'trig': return wrap('Trigonometric function calculator.',`
+    <div class="field"><label>Angle Value</label><input type="number" id="trig-val" placeholder="e.g. 45"></div>
+    <div class="field"><label>Unit</label><select id="trig-unit"><option>Degrees</option><option>Radians</option></select></div>
+    ${btn('Calculate','calcTrig()')}${res('trig-res')}`);
+
+  case 'probability': return wrap('Basic probability calculator.',`
+    <div class="field"><label>Favorable Outcomes</label><input type="number" id="prob-f" placeholder="e.g. 3"></div>
+    <div class="field"><label>Total Outcomes</label><input type="number" id="prob-t" placeholder="e.g. 6"></div>
+    ${btn('Calculate','calcProb()')}${res('prob-res')}`);
+
+  case 'permcomb': return wrap('Permutations and Combinations: nPr and nCr.',`
+    <div class="row">
+      <div class="field"><label>n</label><input type="number" id="pc-n" placeholder="10" min="0"></div>
+      <div class="field"><label>r</label><input type="number" id="pc-r" placeholder="3" min="0"></div>
+    </div>
+    ${btn('Calculate','calcPC()')}${res('pc-res')}`);
+
+  case 'prime': return wrap('Check if a number is prime and find nearby primes.',`
+    <div class="field"><label>Number</label><input type="number" id="prime-n" placeholder="e.g. 97" min="2"></div>
+    ${btn('Check','checkPrime()')}${res('prime-res')}`);
+
+  case 'lcm-gcd': return wrap('Find LCM and GCD of two or more numbers.',`
+    <div class="field"><label>Numbers (comma-separated)</label><input type="text" id="lg-nums" placeholder="e.g. 12, 18, 24"></div>
+    ${btn('Calculate','calcLCMGCD()')}${res('lg-res')}`);
+
+  case 'base-conv': return wrap('Convert between Binary, Decimal, Octal and Hex.',`
+    <div class="field"><label>Value</label><input type="text" id="bc-val" placeholder="e.g. 255"></div>
+    <div class="field"><label>From Base</label>
+      <select id="bc-from"><option value="10">Decimal (10)</option><option value="2">Binary (2)</option><option value="8">Octal (8)</option><option value="16">Hex (16)</option></select>
+    </div>
+    ${btn('Convert','calcBaseConv()')}${res('bc-res')}`);
+
+  // ── DEVELOPER TOOLS
+  case 'password-gen': return wrap('Generate secure random passwords.',`
+    <div class="field"><label>Length</label><input type="number" id="pw-len" value="16" min="4" max="128"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <label style="color:var(--text);font-size:13px"><input type="checkbox" id="pw-upper" checked> Uppercase</label>
+      <label style="color:var(--text);font-size:13px"><input type="checkbox" id="pw-lower" checked> Lowercase</label>
+      <label style="color:var(--text);font-size:13px"><input type="checkbox" id="pw-nums" checked> Numbers</label>
+      <label style="color:var(--text);font-size:13px"><input type="checkbox" id="pw-syms" checked> Symbols</label>
+    </div>
+    <div class="field"><label>Count</label><input type="number" id="pw-count" value="3" min="1" max="20"></div>
+    ${btn('Generate','genPassword()')}${res('pw-res')}`);
+
+  case 'uuid-gen': return wrap('Generate UUID v4 identifiers.',`
+    <div class="field"><label>Count</label><input type="number" id="uuid-count" value="5" min="1" max="50"></div>
+    ${btn('Generate','genUUID()')}${res('uuid-res')}`);
+
+  case 'base64': return wrap('Encode or decode Base64.',`
+    <div class="field"><label>Text</label><textarea id="b64-in" placeholder="Enter text to encode or Base64 to decode..."></textarea></div>
+    <div style="display:flex;gap:10px">${btn('Encode','b64Encode()')} <button class="btn btn-outline" onclick="b64Decode()">Decode</button></div>
+    ${res('b64-res')}`);
+
+  case 'url-enc': return wrap('Encode or decode URLs.',`
+    <div class="field"><label>URL / Text</label><textarea id="url-in" placeholder="Enter URL or encoded string..."></textarea></div>
+    <div style="display:flex;gap:10px">${btn('Encode','urlEncode()')} <button class="btn btn-outline" onclick="urlDecode()">Decode</button></div>
+    ${res('url-res')}`);
+
+  case 'color-conv': return wrap('Convert between HEX, RGB and HSL color formats.',`
+    <div class="field"><label>Color Input</label><input type="text" id="cc-in" placeholder="e.g. #ff6a9b or rgb(255,106,155)" oninput="convColor()"></div>
+    <div id="cc-swatch" style="display:none"><div class="color-swatch" id="cc-sw"></div><span id="cc-lbl"></span></div>
+    ${res('cc-res')}`);
+
+  // ── DESIGN TOOLS
+  case 'color-picker': return wrap('Pick a color and get all its codes.',`
+    <div class="field"><label>Color</label><input type="color" id="cp-color" value="#7c6aff" oninput="updateColorPicker()" style="height:50px;padding:4px;cursor:pointer"></div>
+    <div class="result show" id="cp-res" style="display:block"></div>`);
+
+  case 'gradient-gen': return wrap('Generate CSS gradients.',`
+    <div class="row">
+      <div class="field"><label>Color 1</label><input type="color" id="gr-c1" value="#7c6aff" oninput="updateGradient()"></div>
+      <div class="field"><label>Color 2</label><input type="color" id="gr-c2" value="#ff6a9b" oninput="updateGradient()"></div>
+    </div>
+    <div class="field"><label>Direction</label>
+      <select id="gr-dir" onchange="updateGradient()">
+        <option>to right</option><option>to bottom</option><option>to bottom right</option><option>to top right</option><option>135deg</option><option>45deg</option>
+      </select>
+    </div>
+    <div class="gradient-preview" id="gr-prev"></div>
+    <div class="result show" id="gr-res" style="display:block"></div>`);
+
+  case 'box-shadow': return wrap('Generate CSS box shadows.',`
+    <div class="row">
+      <div class="field"><label>X Offset (px)</label><input type="range" id="sh-x" min="-50" max="50" value="5" oninput="updateShadow()"><span id="sh-xv">5</span></div>
+      <div class="field"><label>Y Offset (px)</label><input type="range" id="sh-y" min="-50" max="50" value="5" oninput="updateShadow()"><span id="sh-yv">5</span></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Blur (px)</label><input type="range" id="sh-b" min="0" max="100" value="15" oninput="updateShadow()"><span id="sh-bv">15</span></div>
+      <div class="field"><label>Spread (px)</label><input type="range" id="sh-s" min="-50" max="50" value="0" oninput="updateShadow()"><span id="sh-sv">0</span></div>
+    </div>
+    <div class="field"><label>Color</label><input type="color" id="sh-c" value="#7c6aff" oninput="updateShadow()"></div>
+    <div class="shadow-preview" id="sh-prev"></div>
+    <div class="result show" id="sh-res" style="display:block"></div>`);
+
+  case 'css-button': return wrap('Generate CSS button styles.',`
+    <div class="field"><label>Button Text</label><input type="text" id="cbtn-txt" value="Click Me" oninput="updateCSSBtn()"></div>
+    <div class="row">
+      <div class="field"><label>BG Color</label><input type="color" id="cbtn-bg" value="#7c6aff" oninput="updateCSSBtn()"></div>
+      <div class="field"><label>Text Color</label><input type="color" id="cbtn-tc" value="#ffffff" oninput="updateCSSBtn()"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Border Radius (px)</label><input type="number" id="cbtn-r" value="8" oninput="updateCSSBtn()"></div>
+      <div class="field"><label>Font Size (px)</label><input type="number" id="cbtn-fs" value="16" oninput="updateCSSBtn()"></div>
+    </div>
+    <div class="btn-preview-wrap" id="cbtn-prev"></div>
+    <div class="result show" id="cbtn-res" style="display:block"></div>`);
+
+  case 'aspect-ratio': return wrap('Calculate aspect ratio dimensions.',`
+    <div class="field"><label>Mode</label>
+      <select id="ar-mode">
+        <option value="find">Find ratio from dimensions</option>
+        <option value="scale">Scale to new width</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="field"><label>Width</label><input type="number" id="ar-w" placeholder="1920"></div>
+      <div class="field"><label>Height</label><input type="number" id="ar-h" placeholder="1080"></div>
+    </div>
+    <div class="field"><label>New Width (for scaling)</label><input type="number" id="ar-nw" placeholder="1280"></div>
+    ${btn('Calculate','calcAR()')}${res('ar-res')}`);
+
+  // ── SOCIAL / INTERNET
+  case 'yt-earnings': return wrap('Estimate YouTube ad revenue.',`
+    <div class="field"><label>Monthly Views</label><input type="number" id="yt-views" placeholder="e.g. 100000"></div>
+    <div class="field"><label>Niche CPM (₹)</label>
+      <select id="yt-cpm">
+        <option value="60">Finance / Business (~₹600)</option>
+        <option value="40">Tech / Gaming (~₹400)</option>
+        <option value="20">Entertainment (~₹200)</option>
+        <option value="15">General (~₹150)</option>
+      </select>
+    </div>
+    ${btn('Estimate','calcYT()')}${res('yt-res')}`);
+
+  case 'ig-engage': return wrap('Calculate Instagram engagement rate.',`
+    <div class="field"><label>Followers</label><input type="number" id="ig-followers" placeholder="e.g. 10000"></div>
+    <div class="field"><label>Average Likes per Post</label><input type="number" id="ig-likes" placeholder="e.g. 350"></div>
+    <div class="field"><label>Average Comments per Post</label><input type="number" id="ig-comments" placeholder="e.g. 25"></div>
+    ${btn('Calculate','calcIG()')}${res('ig-res')}`);
+
+  case 'username-gen': return wrap('Generate username ideas from a keyword.',`
+    <div class="field"><label>Keyword / Name</label><input type="text" id="un-key" placeholder="e.g. alex"></div>
+    ${btn('Generate','genUsername()')}${res('un-res')}`);
+
+  case 'name-gen': return wrap('Generate random names.',`
+    <div class="field"><label>Gender</label><select id="ng-g"><option>Any</option><option>Male</option><option>Female</option></select></div>
+    <div class="field"><label>Count</label><input type="number" id="ng-count" value="10" min="1" max="50"></div>
+    ${btn('Generate','genNames()')}${res('ng-res')}`);
+
+  case 'email-valid': return wrap('Validate email address format.',`
+    <div class="field"><label>Email Address</label><input type="text" id="ev-email" placeholder="e.g. user@example.com"></div>
+    ${btn('Validate','validateEmail()')}${res('ev-res')}`);
+
+  // ── PRODUCTIVITY
+  case 'todo': return wrap('Simple to-do list.',`
+    <div class="row">
+      <div class="field" style="flex:1"><label>New Task</label><input type="text" id="todo-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTodo()"></div>
+      <div style="padding-top:22px">${btn('Add','addTodo()')}</div>
+    </div>
+    <ul class="todo-list" id="todo-list"></ul>`);
+
+  case 'countdown': return wrap('Countdown to a specific date/time.',`
+    <div class="field"><label>Target Date & Time</label><input type="datetime-local" id="cd-target"></div>
+    ${btn('Start Countdown','startCountdown()')}
+    <div class="timer-display" id="cd-display">00:00:00:00</div>
+    <div style="text-align:center;color:var(--muted);font-size:12px">Days : Hours : Minutes : Seconds</div>`);
+
+  case 'stopwatch': return wrap('Precision stopwatch with lap times.',`
+    <div class="timer-display" id="sw-display">00:00.000</div>
+    <div class="timer-btns">
+      <button class="btn" id="sw-start" onclick="swToggle()">Start</button>
+      <button class="btn btn-outline" onclick="swLap()">Lap</button>
+      <button class="btn btn-outline" onclick="swReset()">Reset</button>
+    </div>
+    <ul id="sw-laps" style="list-style:none;margin-top:16px;font-size:12px;color:var(--muted)"></ul>`);
+
+  case 'pomodoro': return wrap('Pomodoro productivity timer.',`
+    <div class="pomodoro-mode" id="pom-mode">FOCUS</div>
+    <div class="timer-display" id="pom-display">25:00</div>
+    <div class="timer-btns">
+      <button class="btn" id="pom-start" onclick="pomToggle()">Start</button>
+      <button class="btn btn-outline" onclick="pomReset()">Reset</button>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+      <button class="btn btn-outline" style="font-size:12px;padding:6px 12px" onclick="pomSetMode('focus',25)">25 min</button>
+      <button class="btn btn-outline" style="font-size:12px;padding:6px 12px" onclick="pomSetMode('short',5)">5 min break</button>
+      <button class="btn btn-outline" style="font-size:12px;padding:6px 12px" onclick="pomSetMode('long',15)">15 min break</button>
+    </div>`);
+
+  // ── FUN
+  case 'typing-test': return wrap('Test your typing speed (WPM).',`
+    <div id="typing-text" class="typing-area"></div>
+    <div class="field"><label>Your Input</label><input type="text" id="typing-input" placeholder="Start typing above text..." oninput="typingInput()" autocomplete="off" autocorrect="off" spellcheck="false"></div>
+    <div style="display:flex;gap:20px;font-size:13px;color:var(--muted);margin-bottom:12px">
+      <span>WPM: <strong id="wpm-val" style="color:var(--accent3)">0</strong></span>
+      <span>Accuracy: <strong id="acc-val" style="color:var(--accent3)">100%</strong></span>
+      <span>Time: <strong id="typ-time" style="color:var(--accent3)">0s</strong></span>
+    </div>
+    ${btn('New Text','newTypingText()')}`);
+
+  case 'love-calc': return wrap('Love compatibility calculator ❤️',`
+    <div class="field"><label>Your Name</label><input type="text" id="lc-a" placeholder="Enter your name"></div>
+    <div class="field"><label>Partner's Name</label><input type="text" id="lc-b" placeholder="Enter their name"></div>
+    ${btn('Calculate ❤️','calcLove()')}
+    <div class="result" id="lc-res">
+      <div class="result-main" id="lc-pct"></div>
+      <div id="lc-msg"></div>
+      <div class="love-meter"><div class="love-fill" id="lc-fill" style="width:0%"></div></div>
+    </div>`);
+
+  case 'dice-roller': return wrap('Roll dice of any type.',`
+    <div class="dice-wrap">
+      <div class="dice-face" id="dice-face">🎲</div>
+      <div class="field"><label>Dice Type</label>
+        <select id="dice-type" style="max-width:200px">
+          <option value="6">D6</option><option value="4">D4</option><option value="8">D8</option>
+          <option value="10">D10</option><option value="12">D12</option><option value="20">D20</option><option value="100">D100</option>
+        </select>
+      </div>
+      <div class="field"><label>Number of Dice</label><input type="number" id="dice-count" value="1" min="1" max="10" style="max-width:200px"></div>
+      ${btn('Roll 🎲','rollDice()')}
+      <div class="result" id="dice-res"></div>
+    </div>`);
+
+  case 'random-picker': return wrap('Pick random items from a list.',`
+    <div class="field"><label>Items (one per line)</label><textarea id="rp-items" placeholder="Alice&#10;Bob&#10;Charlie&#10;Diana&#10;Eve" rows="6"></textarea></div>
+    <div class="field"><label>Pick How Many</label><input type="number" id="rp-count" value="1" min="1"></div>
+    ${btn('Pick Random','randPick()')}${res('rp-res')}`);
+
+  case 'spin-wheel': return wrap('Spin the wheel to pick a random item.',`
+    <div class="spin-wheel-wrap">
+      <canvas id="wheel-canvas" width="300" height="300"></canvas>
+      <div class="field" style="width:100%;max-width:300px"><label>Items (comma-separated)</label><input type="text" id="wheel-items" value="Option 1,Option 2,Option 3,Option 4,Option 5" oninput="drawWheel()"></div>
+      ${btn('Spin!','spinWheel()')}
+      <div class="result" id="wheel-res"></div>
+    </div>`);
+
+  // ── ENGINEERING
+  case 'ohms-law': return wrap("Ohm's Law: V = I × R. Fill any two fields.",`
+    <div class="row">
+      <div class="field"><label>Voltage V (Volts)</label><input type="number" id="ohm-v" placeholder=""></div>
+      <div class="field"><label>Current I (Amps)</label><input type="number" id="ohm-i" placeholder=""></div>
+      <div class="field"><label>Resistance R (Ohms)</label><input type="number" id="ohm-r" placeholder=""></div>
+    </div>
+    ${btn("Calculate",'calcOhm()')}${res('ohm-res')}`);
+
+  case 'voltage': return wrap('Voltage, Current and Resistance calculator.',`
+    <div class="field"><label>Solve For</label><select id="vc-solve"><option value="v">Voltage (V)</option><option value="i">Current (I)</option><option value="r">Resistance (R)</option><option value="p">Power (P)</option></select></div>
+    <div class="row">
+      <div class="field"><label>Value 1</label><input type="number" id="vc-v1" placeholder=""></div>
+      <div class="field"><label>Value 2</label><input type="number" id="vc-v2" placeholder=""></div>
+    </div>
+    ${btn('Calculate','calcVC()')}${res('vc-res')}`);
+
+  case 'force': return wrap('F = m × a. Newton\'s second law.',`
+    <div class="row">
+      <div class="field"><label>Mass (kg)</label><input type="number" id="force-m" placeholder=""></div>
+      <div class="field"><label>Acceleration (m/s²)</label><input type="number" id="force-a" placeholder=""></div>
+      <div class="field"><label>Force (N)</label><input type="number" id="force-f" placeholder=""></div>
+    </div>
+    ${btn('Calculate','calcForce()')}${res('force-res')}`);
+
+  case 'density': return wrap('ρ = m / V. Density, mass or volume.',`
+    <div class="row">
+      <div class="field"><label>Mass (kg)</label><input type="number" id="den-m" placeholder=""></div>
+      <div class="field"><label>Volume (m³)</label><input type="number" id="den-v" placeholder=""></div>
+      <div class="field"><label>Density (kg/m³)</label><input type="number" id="den-d" placeholder=""></div>
+    </div>
+    ${btn('Calculate','calcDensity()')}${res('den-res')}`);
+
+  case 'pressure-sci': return wrap('P = F / A. Pressure, force or area.',`
+    <div class="row">
+      <div class="field"><label>Force (N)</label><input type="number" id="pr-f" placeholder=""></div>
+      <div class="field"><label>Area (m²)</label><input type="number" id="pr-a" placeholder=""></div>
+      <div class="field"><label>Pressure (Pa)</label><input type="number" id="pr-p" placeholder=""></div>
+    </div>
+    ${btn('Calculate','calcPressureSci()')}${res('prsci-res')}`);
+
+  case 'work-energy': return wrap('W = F × d. Work, force or distance.',`
+    <div class="row">
+      <div class="field"><label>Force (N)</label><input type="number" id="we-f" placeholder=""></div>
+      <div class="field"><label>Distance (m)</label><input type="number" id="we-d" placeholder=""></div>
+      <div class="field"><label>Work (J)</label><input type="number" id="we-w" placeholder=""></div>
+    </div>
+    ${btn('Calculate','calcWork()')}${res('we-res')}`);
+
+  case 'motion': return wrap('Kinematic equations of motion.',`
+    <div class="row">
+      <div class="field"><label>Initial Velocity u (m/s)</label><input type="number" id="mot-u" placeholder="0"></div>
+      <div class="field"><label>Acceleration a (m/s²)</label><input type="number" id="mot-a" placeholder="9.8"></div>
+    </div>
+    <div class="field"><label>Time t (s)</label><input type="number" id="mot-t" placeholder="5"></div>
+    ${btn('Calculate','calcMotion()')}${res('mot-res')}`);
+
+  // ── REAL LIFE
+  case 'age-calc': return wrap('Calculate exact age from date of birth.',`
+    <div class="field"><label>Date of Birth</label><input type="date" id="age-dob"></div>
+    ${btn('Calculate','calcAge()')}${res('age-res')}`);
+
+  case 'date-diff': return wrap('Difference between two dates.',`
+    <div class="row">
+      <div class="field"><label>Start Date</label><input type="date" id="dd-start"></div>
+      <div class="field"><label>End Date</label><input type="date" id="dd-end"></div>
+    </div>
+    ${btn('Calculate','calcDateDiff()')}${res('datediff-res')}`);
+
+  case 'timezone': return wrap('Convert time between time zones.',`
+    <div class="field"><label>Time</label><input type="time" id="tz-time" value="12:00"></div>
+    <div class="field"><label>Common Zones</label>
+      <select id="tz-sel" onchange="convTZ()">
+        <option value="0">UTC +0</option><option value="5.5" selected>IST +5:30</option><option value="8">CST +8</option>
+        <option value="-5">EST -5</option><option value="-8">PST -8</option><option value="1">CET +1</option>
+        <option value="9">JST +9</option><option value="-3">BRT -3</option>
+      </select>
+    </div>
+    <div class="result show" id="tz-res" style="display:block"></div>`);
+
+  case 'tip-calc': return wrap('Calculate tip amount and total.',`
+    <div class="field"><label>Bill Amount</label><input type="number" id="tip-bill" placeholder="e.g. 1200"></div>
+    <div class="field"><label>Tip %</label>
+      <select id="tip-pct"><option value="10">10%</option><option value="15" selected>15%</option><option value="18">18%</option><option value="20">20%</option><option value="25">25%</option></select>
+    </div>
+    ${btn('Calculate','calcTip()')}${res('tip-res')}`);
+
+  case 'split-bill': return wrap('Split bill equally among friends.',`
+    <div class="field"><label>Total Bill</label><input type="number" id="sb-bill" placeholder="e.g. 3000"></div>
+    <div class="field"><label>Number of People</label><input type="number" id="sb-people" placeholder="e.g. 4" min="1"></div>
+    <div class="field"><label>Tip %</label><input type="number" id="sb-tip" value="10"></div>
+    ${btn('Split','calcSplit()')}${res('sb-res')}`);
+
+  case 'cooking-conv': return wrap('Convert cooking measurements.',`
+    <div class="field"><label>Value</label><input type="number" id="cook-val" placeholder="e.g. 2"></div>
+    <div class="field"><label>From</label>
+      <select id="cook-from">
+        <option value="cup">Cup</option><option value="tbsp">Tablespoon</option><option value="tsp">Teaspoon</option>
+        <option value="ml">Milliliter</option><option value="L">Liter</option>
+        <option value="oz">Ounce</option><option value="lb">Pound</option><option value="g">Gram</option><option value="kg">Kilogram</option>
+      </select>
+    </div>
+    ${btn('Convert','calcCooking()')}${res('cook-res')}`);
+
+  case 'fuel-cost': return wrap('Calculate trip fuel cost.',`
+    <div class="field"><label>Distance (km)</label><input type="number" id="fc-dist" placeholder="e.g. 300"></div>
+    <div class="field"><label>Fuel Efficiency (km/L)</label><input type="number" id="fc-eff" placeholder="e.g. 15"></div>
+    <div class="field"><label>Fuel Price (₹/L)</label><input type="number" id="fc-price" placeholder="e.g. 100"></div>
+    ${btn('Calculate','calcFuelCost()')}${res('fc-res')}`);
+
+  case 'travel-time': return wrap('Estimate travel time.',`
+    <div class="field"><label>Distance (km)</label><input type="number" id="tt-dist" placeholder="e.g. 500"></div>
+    <div class="field"><label>Average Speed (km/h)</label><input type="number" id="tt-speed" placeholder="e.g. 80"></div>
+    ${btn('Calculate','calcTravelTime()')}${res('tt-res')}`);
+
+  default: return `<div class="tool-title">${name}</div><div class="tool-desc">Coming soon.</div>`;
+  }
+}
+
+// ─── UNIT CONVERTER TEMPLATE ──────────────────────────────────────────────────
+function unitConvHTML(id, title, units){
+  const opts = units.map(u=>`<option value="${u[2]}">${u[0]} (${u[1]})</option>`).join('');
+  return `<div class="tool-title">${title}</div><div class="tool-desc">Convert between ${title.replace(' Converter','')} units.</div><div class="card">
+    <div class="field"><label>Value</label><input type="number" id="${id}-val" placeholder="Enter value" oninput="convUnit('${id}')"></div>
+    <div class="row">
+      <div class="field"><label>From</label><select id="${id}-from" onchange="convUnit('${id}')">${opts}</select></div>
+      <div class="field"><label>To</label><select id="${id}-to" onchange="convUnit('${id}')">${opts}</select></div>
+    </div>
+    <div class="result show" id="${id}-res" style="display:block"></div>
+  </div>`;
+}
+
+function convUnit(id){
+  const v = parseFloat(document.getElementById(id+'-val').value);
+  const from = parseFloat(document.getElementById(id+'-from').value);
+  const to = parseFloat(document.getElementById(id+'-to').value);
+  const res = document.getElementById(id+'-res');
+  if(isNaN(v)){res.innerHTML='';return;}
+  const base = v * from;
+  const result = base / to;
+  res.innerHTML = `<div class="result-main">${fmt(result)}</div>`;
+  res.style.display='block';
+}
+
+// ─── AFTER RENDER (init interactive tools) ───────────────────────────────────
+function afterRender(id){
+  if(id==='simple-calc') scInit();
+  if(id==='scientific') sciInit();
+  if(id==='color-picker') updateColorPicker();
+  if(id==='gradient-gen') updateGradient();
+  if(id==='box-shadow') updateShadow();
+  if(id==='css-button') updateCSSBtn();
+  if(id==='spin-wheel') { setTimeout(drawWheel,100); }
+  if(id==='typing-test') newTypingText();
+  if(id==='temperature') calcTemp();
+  if(id==='timezone') convTZ();
+  if(id==='todo') renderTodos();
+}
+
+// ─── SIMPLE CALCULATOR ────────────────────────────────────────────────────────
+let scExpr='', scVal='0', scJustCalc=false;
+function scInit(){ scExpr=''; scVal='0'; scJustCalc=false; scUpdate(); }
+function scKey(k){
+  if(k==='clear'){scExpr='';scVal='0';scJustCalc=false;}
+  else if(k==='='){
+    try{
+      let e=scExpr.replace(/÷/g,'/').replace(/×/g,'*').replace(/−/g,'-');
+      scVal=String(eval(e));
+      scExpr=scVal;
+      scJustCalc=true;
+    }catch{scVal='Err';}
+  } else {
+    const ops=['÷','×','−','+'];
+    if(scJustCalc && !ops.includes(k)){scExpr='';scVal='0';}
+    scJustCalc=false;
+    if(ops.includes(k)){scExpr+=' '+k+' ';}
+    else { if(scVal==='0'&&k!=='.'){scExpr=scExpr.trimEnd(); scExpr+=(scExpr?'':'')+k;}else{scExpr+=k;} scVal=scExpr.split(/[÷×−+]/).pop().trim()||'0'; }
+  }
+  scUpdate();
+}
+function scUpdate(){
+  document.getElementById('sc-expr').textContent=scExpr;
+  document.getElementById('sc-disp').textContent=scVal;
+}
+
+// ─── SCIENTIFIC CALCULATOR ────────────────────────────────────────────────────
+let sciExpr='', sciVal='0';
+function sciInit(){ sciExpr=''; sciVal='0'; sciUpdate(); }
+function sciKey(k){
+  const ops=['÷','×','−','+'];
+  if(k==='C'){sciExpr='';sciVal='0';}
+  else if(k==='='){
+    try{
+      let e=sciExpr
+        .replace(/÷/g,'/').replace(/×/g,'*').replace(/−/g,'-')
+        .replace(/sin/g,'Math.sin').replace(/cos/g,'Math.cos').replace(/tan/g,'Math.tan')
+        .replace(/log/g,'Math.log10').replace(/ln/g,'Math.log')
+        .replace(/√/g,'Math.sqrt').replace(/π/g,'Math.PI').replace(/e(?![+\-\d])/g,'Math.E')
+        .replace(/x²/g,'**2').replace(/xʸ/g,'**');
+      sciVal=String(parseFloat(eval(e).toFixed(10)));
+      sciExpr=sciVal;
+    }catch{sciVal='Error';}
+  } else if(['sin','cos','tan','log','ln','√'].includes(k)){
+    sciExpr+=k+'(';
+  } else if(k==='x²'){sciExpr+='**2';}
+  else if(k==='xʸ'){sciExpr+='**';}
+  else if(k==='π'){sciExpr+='π';}
+  else if(k==='e'){sciExpr+='e';}
+  else {sciExpr+=k;}
+  if(k!=='=') sciVal=sciExpr;
+  sciUpdate();
+}
+function sciUpdate(){
+  document.getElementById('sci-expr').textContent=sciExpr;
+  document.getElementById('sci-disp').textContent=sciVal;
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function fmt(n){ if(isNaN(n)||!isFinite(n))return'—'; return parseFloat(n.toPrecision(10)).toLocaleString('en-IN',{maximumFractionDigits:6}); }
+function fmtINR(n){ return '₹'+parseFloat(n.toFixed(2)).toLocaleString('en-IN'); }
+function showRes(id, main, rows=[]){
+  const el=document.getElementById(id);
+  if(!el)return;
+  let html=`<div class="result-main">${main}</div>`;
+  rows.forEach(([l,v])=>{ html+=`<div class="result-row"><span>${l}</span><span>${v}</span></div>`; });
+  el.innerHTML=html; el.style.display='block';
+}
+function gv(id){ return parseFloat(document.getElementById(id).value); }
+function gvs(id){ return document.getElementById(id).value; }
+
+// ─── PERCENTAGE ───────────────────────────────────────────────────────────────
+function pctMode(){
+  const m=gvs('pct-mode');
+  const labels=[['',''],['Value X','Percentage (%)'],['Part X','Whole Y'],['From X','To Y'],['Value X','Change (%)']];
+  const idx=parseInt(m);
+  document.getElementById('pct-l1').textContent=labels[idx][0];
+  document.getElementById('pct-l2').textContent=labels[idx][1];
+}
+function calcPct(){
+  const a=gv('pct-a'),b=gv('pct-b'),m=gvs('pct-mode');
+  if(isNaN(a)||isNaN(b))return;
+  let r,label;
+  if(m==='1'){r=a*b/100;label=`${a}% of ${b}`;}
+  else if(m==='2'){r=a/b*100;label=`${a} is ${fmt(r)}% of ${b}`;}
+  else if(m==='3'){r=(b-a)/Math.abs(a)*100;label=`${r>=0?'+':''}${fmt(r)}% change`;}
+  else{r=a*(1+b/100);label=`Result after ${b>=0?'+':''}${b}%`;}
+  showRes('pct-res',`${fmt(r)}${m==='2'?'%':''}`,[[label,'']]);
+}
+
+// ─── FRACTION ─────────────────────────────────────────────────────────────────
+function calcFraction(){
+  let n1=gv('fn1'),d1=gv('fd1'),n2=gv('fn2'),d2=gv('fd2'),op=gvs('fop');
+  if([n1,d1,n2,d2].some(isNaN)||d1===0||d2===0)return;
+  let rn,rd;
+  if(op==='+'){rn=n1*d2+n2*d1;rd=d1*d2;}
+  else if(op==='−'){rn=n1*d2-n2*d1;rd=d1*d2;}
+  else if(op==='×'){rn=n1*n2;rd=d1*d2;}
+  else{rn=n1*d2;rd=d1*n2;}
+  const g=gcd(Math.abs(rn),Math.abs(rd));
+  showRes('frac-res',`${rn/g} / ${rd/g}`,[[`Decimal`,`${fmt(rn/rd)}`]]);
+}
+function gcd(a,b){return b===0?a:gcd(b,a%b);}
+
+// ─── RATIO ────────────────────────────────────────────────────────────────────
+function calcRatio(){
+  const a=gv('ra'),b=gv('rb'),c=gv('rc');
+  if(isNaN(a)||isNaN(b))return;
+  const g=gcd(a,b);
+  let rows=[['Simplified',`${a/g} : ${b/g}`]];
+  if(!isNaN(c)){rows.push(['D (= B×C/A)',`${fmt(b*c/a)}`]);}
+  showRes('ratio-res',`${a/g} : ${b/g}`,rows);
+}
+
+// ─── AVERAGE ─────────────────────────────────────────────────────────────────
+function calcAvg(){
+  const nums=parseNums('avg-nums');
+  if(!nums.length)return;
+  showRes('avg-res',fmt(nums.reduce((a,b)=>a+b,0)/nums.length),[['Sum',fmt(nums.reduce((a,b)=>a+b,0))],['Count',nums.length]]);
+}
+function parseNums(id){return gvs(id).split(',').map(Number).filter(n=>!isNaN(n));}
+
+// ─── MEAN/MEDIAN/MODE ─────────────────────────────────────────────────────────
+function calcMMM(){
+  const nums=parseNums('mmm-nums').sort((a,b)=>a-b);
+  if(!nums.length)return;
+  const mean=nums.reduce((a,b)=>a+b,0)/nums.length;
+  const mid=Math.floor(nums.length/2);
+  const median=nums.length%2?nums[mid]:(nums[mid-1]+nums[mid])/2;
+  const freq={};nums.forEach(n=>freq[n]=(freq[n]||0)+1);
+  const maxF=Math.max(...Object.values(freq));
+  const mode=Object.keys(freq).filter(k=>freq[k]===maxF).join(', ');
+  showRes('mmm-res',`Mean: ${fmt(mean)}`,[['Median',fmt(median)],['Mode',mode],['Count',nums.length]]);
+}
+
+// ─── STD DEV ──────────────────────────────────────────────────────────────────
+function calcSD(){
+  const nums=parseNums('sd-nums'),type=gvs('sd-type');
+  if(!nums.length)return;
+  const mean=nums.reduce((a,b)=>a+b,0)/nums.length;
+  const variance=nums.reduce((a,b)=>a+Math.pow(b-mean,2),0)/(type==='p'?nums.length:nums.length-1);
+  showRes('sd-res',`σ = ${fmt(Math.sqrt(variance))}`,[['Variance',fmt(variance)],['Mean',fmt(mean)]]);
+}
+
+// ─── RANDOM NUMBER ────────────────────────────────────────────────────────────
+function genRandom(){
+  const mn=gv('rn-min'),mx=gv('rn-max'),cnt=Math.min(100,parseInt(gvs('rn-count'))||1);
+  if(isNaN(mn)||isNaN(mx)||mn>=mx)return;
+  const nums=Array.from({length:cnt},()=>Math.floor(Math.random()*(mx-mn+1))+mn);
+  showRes('rn-res',nums.length===1?nums[0]:nums.join(', '),[]);
+}
+
+// ─── ROUNDING ─────────────────────────────────────────────────────────────────
+function calcRound(){
+  const n=gv('round-n'),d=parseInt(gvs('round-d'));
+  if(isNaN(n))return;
+  showRes('round-res',n.toFixed(d),[['Floor',Math.floor(n)],['Ceil',Math.ceil(n)]]);
+}
+
+// ─── TEMPERATURE ──────────────────────────────────────────────────────────────
+function calcTemp(){
+  const v=gv('temp-val'),f=gvs('temp-from'),el=document.getElementById('temp-res');
+  if(isNaN(v)){el.innerHTML='';return;}
+  let c;
+  if(f==='Celsius')c=v;
+  else if(f==='Fahrenheit')c=(v-32)*5/9;
+  else c=v-273.15;
+  const F=c*9/5+32,K=c+273.15;
+  el.innerHTML=`<div class="result-main">${fmt(c)}°C</div><div class="result-row"><span>Fahrenheit</span><span>${fmt(F)}°F</span></div><div class="result-row"><span>Kelvin</span><span>${fmt(K)} K</span></div>`;
+  el.style.display='block';
+}
+
+// ─── FINANCIAL ────────────────────────────────────────────────────────────────
+function calcEMI(){
+  const P=gv('emi-p'),r=gv('emi-r')/12/100,n=gv('emi-n');
+  if([P,r,n].some(isNaN)||P<=0||n<=0)return;
+  const emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  const total=emi*n;
+  showRes('emi-res',fmtINR(emi)+'/mo',[['Total Payment',fmtINR(total)],['Total Interest',fmtINR(total-P)],['Principal',fmtINR(P)]]);
+}
+function calcLoan(){
+  const P=gv('loan-p'),r=gv('loan-r')/12/100,n=gv('loan-y')*12;
+  if([P,r,n].some(isNaN))return;
+  const emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  showRes('loan-res',fmtINR(emi)+'/mo',[['Total Repayment',fmtINR(emi*n)],['Interest Paid',fmtINR(emi*n-P)]]);
+}
+function calcMortgage(){
+  const price=gv('mort-price'),down=gv('mort-down'),r=gv('mort-r')/12/100,n=gv('mort-y')*12;
+  const P=price-down;
+  if([P,r,n].some(isNaN)||P<=0)return;
+  const emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  showRes('mort-res',fmtINR(emi)+'/mo',[['Loan Amount',fmtINR(P)],['Total Payment',fmtINR(emi*n)],['Total Interest',fmtINR(emi*n-P)]]);
+}
+function calcInterest(){
+  const P=gv('int-p'),r=gv('int-r')/100,t=gv('int-t'),n=gv('int-freq');
+  if([P,r,t].some(isNaN))return;
+  const si=P*r*t;
+  const ci=P*Math.pow(1+r/n,n*t)-P;
+  showRes('int-res',`CI: ${fmtINR(ci)}`,[['Simple Interest',fmtINR(si)],['SI Total',fmtINR(P+si)],['CI Total',fmtINR(P+ci)]]);
+}
+function calcSIP(){
+  const m=gv('sip-m'),r=gv('sip-r')/12/100,n=gv('sip-y')*12;
+  if([m,r,n].some(isNaN))return;
+  const fv=m*(Math.pow(1+r,n)-1)*(1+r)/r;
+  showRes('sip-res',fmtINR(fv),[['Invested',fmtINR(m*n)],['Returns',fmtINR(fv-m*n)]]);
+}
+function calcIR(){
+  const init=gv('ir-init'),final=gv('ir-final'),yr=gv('ir-yr');
+  if([init,final,yr].some(isNaN)||init<=0)return;
+  const roi=(final-init)/init*100;
+  const cagr=(Math.pow(final/init,1/yr)-1)*100;
+  showRes('ir-res',`${fmt(roi)}% ROI`,[['CAGR',`${fmt(cagr)}%`],['Profit',fmtINR(final-init)]]);
+}
+function calcSavings(){
+  const m=gv('sav-m'),r=gv('sav-r')/12/100,n=gv('sav-y')*12;
+  if([m,r,n].some(isNaN))return;
+  const fv=m*(Math.pow(1+r,n)-1)/r;
+  showRes('sav-res',fmtINR(fv),[['Total Saved',fmtINR(m*n)],['Interest Earned',fmtINR(fv-m*n)]]);
+}
+function calcRetirement(){
+  const ca=gv('ret-age'),ra=gv('ret-rage'),exp=gv('ret-exp'),inf=gv('ret-inf')/100,ret=gv('ret-ret')/100;
+  if([ca,ra,exp,inf,ret].some(isNaN))return;
+  const yrs=ra-ca,lifeExp=85;
+  const futureExp=exp*Math.pow(1+inf,yrs)*12;
+  const retYrs=lifeExp-ra;
+  const corpus=futureExp*(1-Math.pow(1+inf-ret,retYrs))/(ret-inf);
+  showRes('ret-res',fmtINR(corpus),[['Years to Retire',yrs],['Monthly Need at Retirement',fmtINR(futureExp/12)]]);
+}
+function calcGST(){
+  const amt=gv('gst-amt'),rate=gv('gst-rate')/100,type=gvs('gst-type');
+  if(isNaN(amt))return;
+  let base,gstAmt,total;
+  if(type==='excl'){base=amt;gstAmt=amt*rate;total=amt+gstAmt;}
+  else{base=amt/(1+rate);gstAmt=amt-base;total=amt;}
+  showRes('gst-res',fmtINR(gstAmt)+' GST',[['Base Amount',fmtINR(base)],['GST Amount',fmtINR(gstAmt)],['Total',fmtINR(total)]]);
+}
+function calcTax(){
+  const inc=gv('tax-inc'),regime=gvs('tax-regime');
+  if(isNaN(inc))return;
+  let tax=0;
+  if(regime==='new'){
+    const slabs=[[300000,0],[400000,0.05],[300000,0.10],[300000,0.15],[300000,0.20],[Infinity,0.30]];
+    let rem=inc,base=0;
+    for(const [s,r]of slabs){const chunk=Math.min(rem,s);tax+=chunk*r;rem-=chunk;base+=s;if(rem<=0)break;}
+    if(inc<=700000)tax=Math.min(tax,inc-300000>0?inc-300000:0);
+  } else {
+    if(inc>1000000)tax=112500+(inc-1000000)*0.30;
+    else if(inc>500000)tax=12500+(inc-500000)*0.20;
+    else if(inc>250000)tax=(inc-250000)*0.05;
+    if(inc<=500000)tax=Math.max(0,tax-12500);
+  }
+  const cess=tax*0.04;
+  showRes('tax-res',fmtINR(tax+cess),[['Base Tax',fmtINR(tax)],['Health & Education Cess (4%)',fmtINR(cess)],['Effective Rate',`${fmt((tax+cess)/inc*100)}%`]]);
+}
+function calcDiscount(){
+  const orig=gv('disc-orig'),pct=gv('disc-pct');
+  if(isNaN(orig)||isNaN(pct))return;
+  const saving=orig*pct/100;
+  showRes('disc-res',fmtINR(orig-saving),[['You Save',fmtINR(saving)],['Discount',`${pct}%`]]);
+}
+function calcPL(){
+  const cp=gv('pl-cp'),sp=gv('pl-sp');
+  if(isNaN(cp)||isNaN(sp))return;
+  const pl=sp-cp,pct=pl/cp*100;
+  showRes('pl-res',`${pl>=0?'Profit':'Loss'}: ${fmtINR(Math.abs(pl))}`,[['%',`${fmt(Math.abs(pct))}%`]]);
+}
+function calcInflation(){
+  const amt=gv('inf-amt'),rate=gv('inf-rate')/100,yr=gv('inf-yr');
+  if([amt,rate,yr].some(isNaN))return;
+  const future=amt*Math.pow(1+rate,yr);
+  showRes('inf-res',fmtINR(future),[['Today\'s Value',fmtINR(amt)],['Purchasing Power Lost',fmtINR(future-amt)]]);
+}
+
+// ─── HEALTH ───────────────────────────────────────────────────────────────────
+function calcBMI(){
+  const w=gv('bmi-w'),h=gv('bmi-h')/100;
+  if(isNaN(w)||isNaN(h))return;
+  const bmi=w/(h*h);
+  const cat=bmi<18.5?'Underweight':bmi<25?'Normal weight':bmi<30?'Overweight':'Obese';
+  showRes('bmi-res',`${fmt(bmi)} BMI`,[['Category',cat]]);
+}
+function calcBMR(){
+  const w=gv('bmr-w'),h=gv('bmr-h'),age=gv('bmr-age'),g=gvs('bmr-g');
+  if([w,h,age].some(isNaN))return;
+  const bmr=g==='Male'?88.362+13.397*w+4.799*h-5.677*age:447.593+9.247*w+3.098*h-4.330*age;
+  showRes('bmr-res',`${fmt(bmr)} cal/day`,[['Formula','Mifflin-St Jeor']]);
+}
+function calcCalorie(){
+  const w=gv('cal-w'),h=gv('cal-h'),age=gv('cal-age'),g=gvs('cal-g'),act=gv('cal-act');
+  if([w,h,age,act].some(isNaN))return;
+  const bmr=g==='Male'?88.362+13.397*w+4.799*h-5.677*age:447.593+9.247*w+3.098*h-4.330*age;
+  const tdee=bmr*act;
+  showRes('cal-res',`${fmt(tdee)} cal/day`,[['For Weight Loss',fmt(tdee-500)+' cal'],['For Weight Gain',fmt(tdee+500)+' cal'],['BMR',fmt(bmr)+' cal']]);
+}
+function calcBodyFat(){
+  const g=gvs('bf-g'),h=gv('bf-h'),w=gv('bf-waist'),nc=gv('bf-neck'),hip=gv('bf-hip');
+  if([h,w,nc].some(isNaN))return;
+  let bf;
+  if(g==='Male') bf=86.010*Math.log10(w-nc)-70.041*Math.log10(h)+36.76;
+  else bf=163.205*Math.log10(w+hip-nc)-97.684*Math.log10(h)-78.387;
+  showRes('bf-res',`${fmt(bf)}%`,[['Category',bf<6?'Essential':bf<14?'Athletic':bf<18?'Fitness':bf<25?'Average':'Obese']]);
+}
+function calcIdealWeight(){
+  const h=gv('iw-h'),g=gvs('iw-g');
+  if(isNaN(h))return;
+  const inch=(h-152.4)/2.54;
+  const dev=g==='Male'?50+2.3*inch:45.5+2.3*inch;
+  const miller=g==='Male'?56.2+1.41*inch:53.1+1.36*inch;
+  showRes('iw-res',`${fmt(dev)} kg`,[['Devine Formula',`${fmt(dev)} kg`],['Miller Formula',`${fmt(miller)} kg`]]);
+}
+function calcWater(){
+  const w=gv('wi-w'),act=gv('wi-act');
+  if(isNaN(w))return;
+  const ml=w*35*act;
+  showRes('wi-res',`${fmt(ml/1000)} L/day`,[['In mL',`${fmt(ml)} mL`],['Glasses (250mL)',`${Math.ceil(ml/250)}`]]);
+}
+function calcHR(){
+  const age=gv('hr-age'),rest=gv('hr-rest');
+  if(isNaN(age))return;
+  const max=220-age;
+  const hrr=max-rest;
+  showRes('hr-res',`Max: ${max} bpm`,[['50-60% Zone',`${Math.round(rest+hrr*0.5)} – ${Math.round(rest+hrr*0.6)} bpm`],['60-70% Fat Burn',`${Math.round(rest+hrr*0.6)} – ${Math.round(rest+hrr*0.7)} bpm`],['70-85% Cardio',`${Math.round(rest+hrr*0.7)} – ${Math.round(rest+hrr*0.85)} bpm`]]);
+}
+function calcDueDate(){
+  const lmp=gvs('dd-lmp');
+  if(!lmp)return;
+  const d=new Date(lmp);
+  d.setDate(d.getDate()+280);
+  showRes('dd-res',d.toDateString(),[['Weeks',`40 weeks from ${lmp}`]]);
+}
+function calcOvulation(){
+  const lmp=gvs('ov-lmp'),cycle=gv('ov-cycle');
+  if(!lmp||isNaN(cycle))return;
+  const d=new Date(lmp);
+  const ov=new Date(d); ov.setDate(d.getDate()+cycle-14);
+  const start=new Date(ov); start.setDate(ov.getDate()-2);
+  const end=new Date(ov); end.setDate(ov.getDate()+2);
+  showRes('ov-res',ov.toDateString(),[['Fertile Window',`${start.toDateString()} – ${end.toDateString()}`]]);
+}
+
+// ─── MATH ─────────────────────────────────────────────────────────────────────
+function calcQuadratic(){
+  const a=gv('qa'),b=gv('qb'),c=gv('qc');
+  if([a,b,c].some(isNaN)||a===0)return;
+  const disc=b*b-4*a*c;
+  let rows;
+  if(disc>0){rows=[['x₁',fmt((-b+Math.sqrt(disc))/(2*a))],['x₂',fmt((-b-Math.sqrt(disc))/(2*a))],['Discriminant',fmt(disc)]];}
+  else if(disc===0){rows=[['x',fmt(-b/(2*a))],['One real root','']];}
+  else{rows=[['No real roots',`Discriminant: ${fmt(disc)}`]];}
+  showRes('quad-res',`Δ = ${fmt(disc)}`,rows);
+}
+function calcLog(){
+  const v=gv('log-v'),base=gvs('log-base'),custom=gv('log-custom');
+  if(isNaN(v)||v<=0)return;
+  let r;
+  if(base==='e')r=Math.log(v);
+  else if(base==='custom')r=Math.log(v)/Math.log(custom);
+  else r=Math.log10(v)/(base==='10'?1:Math.log10(parseFloat(base)));
+  showRes('log-res',fmt(r),[]);
+}
+function calcTrig(){
+  let v=gv('trig-val'),unit=gvs('trig-unit');
+  if(isNaN(v))return;
+  if(unit==='Degrees')v=v*Math.PI/180;
+  showRes('trig-res',`sin: ${fmt(Math.sin(v))}`,[['cos',fmt(Math.cos(v))],['tan',fmt(Math.tan(v))],['cot',fmt(1/Math.tan(v))]]);
+}
+function calcProb(){
+  const f=gv('prob-f'),t=gv('prob-t');
+  if(isNaN(f)||isNaN(t)||t===0)return;
+  const p=f/t;
+  showRes('prob-res',`${fmt(p*100)}%`,[['Probability',`${f}/${t}`],['Odds For',`${f}:${t-f}`],['Complementary',`${fmt((1-p)*100)}%`]]);
+}
+function calcPC(){
+  const n=parseInt(gvs('pc-n')),r=parseInt(gvs('pc-r'));
+  if(isNaN(n)||isNaN(r)||r>n)return;
+  const nPr=factorial(n)/factorial(n-r);
+  const nCr=factorial(n)/(factorial(r)*factorial(n-r));
+  showRes('pc-res',`nCr = ${fmt(nCr)}`,[['nPr',fmt(nPr)],['nCr',fmt(nCr)]]);
+}
+function factorial(n){let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
+function checkPrime(){
+  const n=parseInt(gvs('prime-n'));
+  if(isNaN(n)||n<2)return;
+  const isPrime=n=>{ if(n<2)return false; for(let i=2;i<=Math.sqrt(n);i++)if(n%i===0)return false; return true; };
+  const result=isPrime(n);
+  let next=n+1;while(!isPrime(next))next++;
+  let prev=n-1;while(prev>1&&!isPrime(prev))prev--;
+  showRes('prime-res',result?`${n} is PRIME`:`${n} is NOT prime`,[['Next prime',next],['Previous prime',prev>1?prev:'—']]);
+}
+function calcLCMGCD(){
+  const nums=parseNums('lg-nums').map(Math.round);
+  if(nums.length<2)return;
+  const lcm=(a,b)=>a*b/gcd(a,b);
+  const g=nums.reduce(gcd),l=nums.reduce(lcm);
+  showRes('lg-res',`GCD: ${g}  |  LCM: ${l}`,[['GCD',g],['LCM',l]]);
+}
+function calcBaseConv(){
+  const val=gvs('bc-val'),from=parseInt(gvs('bc-from'));
+  const n=parseInt(val,from);
+  if(isNaN(n))return;
+  showRes('bc-res',`Dec: ${n}`,[['Binary',n.toString(2)],['Octal',n.toString(8)],['Decimal',n.toString(10)],['Hex',n.toString(16).toUpperCase()]]);
+}
+
+// ─── DEVELOPER TOOLS ─────────────────────────────────────────────────────────
+function genPassword(){
+  const len=parseInt(gvs('pw-len'))||16,cnt=parseInt(gvs('pw-count'))||3;
+  const upper='ABCDEFGHIJKLMNOPQRSTUVWXYZ',lower='abcdefghijklmnopqrstuvwxyz',nums='0123456789',syms='!@#$%^&*()-_=+[]{}|;:,.<>?';
+  let chars='';
+  if(document.getElementById('pw-upper').checked)chars+=upper;
+  if(document.getElementById('pw-lower').checked)chars+=lower;
+  if(document.getElementById('pw-nums').checked)chars+=nums;
+  if(document.getElementById('pw-syms').checked)chars+=syms;
+  if(!chars)return;
+  const pws=Array.from({length:cnt},()=>Array.from({length:len},()=>chars[Math.floor(Math.random()*chars.length)]).join(''));
+  const el=document.getElementById('pw-res');
+  el.innerHTML=pws.map(p=>`<div style="font-family:monospace;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border);color:var(--accent3);word-break:break-all">${p}</div>`).join('');
+  el.style.display='block';
+}
+function genUUID(){
+  const cnt=parseInt(gvs('uuid-count'))||5;
+  const uuid=()=>'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:r&0x3|0x8).toString(16);});
+  const ids=Array.from({length:cnt},uuid);
+  const el=document.getElementById('uuid-res');
+  el.innerHTML=ids.map(u=>`<div style="font-family:monospace;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border);color:var(--accent3)">${u}</div>`).join('');
+  el.style.display='block';
+}
+function b64Encode(){
+  const v=document.getElementById('b64-in').value;
+  const r=btoa(unescape(encodeURIComponent(v)));
+  showRes('b64-res',r,[]);
+}
+function b64Decode(){
+  try{const r=decodeURIComponent(escape(atob(document.getElementById('b64-in').value)));showRes('b64-res',r,[]);}
+  catch{showRes('b64-res','Invalid Base64',[]);}
+}
+function urlEncode(){showRes('url-res',encodeURIComponent(document.getElementById('url-in').value),[]);}
+function urlDecode(){showRes('url-res',decodeURIComponent(document.getElementById('url-in').value),[]);}
+function convColor(){
+  const v=document.getElementById('cc-in').value.trim();
+  const el=document.getElementById('cc-res'),sw=document.getElementById('cc-sw'),lbl=document.getElementById('cc-lbl');
+  let r,g,b;
+  if(/^#([0-9a-f]{3}){1,2}$/i.test(v)){
+    const hex=v.replace('#','');
+    const full=hex.length===3?hex.split('').map(c=>c+c).join(''):hex;
+    r=parseInt(full.slice(0,2),16);g=parseInt(full.slice(2,4),16);b=parseInt(full.slice(4,6),16);
+  } else if(v.startsWith('rgb')){
+    [r,g,b]=v.match(/\d+/g).map(Number);
+  } else return;
+  const hex='#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+  const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,l=(max+min)/2;
+  const d=max-min;const s=d===0?0:d/(1-Math.abs(2*l-1));
+  let h=0;
+  if(d!==0){if(max===r/255)h=((g-b)/255/d)%6;else if(max===g/255)h=(b-r)/255/d+2;else h=(r-g)/255/d+4;h=Math.round(h*60);}
+  if(h<0)h+=360;
+  document.getElementById('cc-swatch').style.display='block';
+  sw.style.background=hex;lbl.textContent=hex;
+  showRes('cc-res',hex,[['RGB',`rgb(${r}, ${g}, ${b})`],['HSL',`hsl(${h}, ${Math.round(s*100)}%, ${Math.round(l*100)}%)`]]);
+}
+
+// ─── DESIGN TOOLS ─────────────────────────────────────────────────────────────
+function updateColorPicker(){
+  const c=document.getElementById('cp-color').value;
+  const r=parseInt(c.slice(1,3),16),g=parseInt(c.slice(3,5),16),b=parseInt(c.slice(5,7),16);
+  document.getElementById('cp-res').innerHTML=`<div class="result-main" style="color:${c}">${c}</div><div class="result-row"><span>RGB</span><span>rgb(${r}, ${g}, ${b})</span></div><div class="result-row"><span>R/G/B</span><span>${r} / ${g} / ${b}</span></div>`;
+  document.getElementById('cp-res').style.display='block';
+}
+function updateGradient(){
+  const c1=gvs('gr-c1'),c2=gvs('gr-c2'),dir=gvs('gr-dir');
+  const css=`linear-gradient(${dir}, ${c1}, ${c2})`;
+  document.getElementById('gr-prev').style.background=css;
+  document.getElementById('gr-res').innerHTML=`<div style="font-size:12px;color:var(--accent3);word-break:break-all">background: ${css};</div>`;
+  document.getElementById('gr-res').style.display='block';
+}
+function updateShadow(){
+  const x=gvs('sh-x'),y=gvs('sh-y'),b=gvs('sh-b'),s=gvs('sh-s'),c=gvs('sh-c');
+  document.getElementById('sh-xv').textContent=x+'px';
+  document.getElementById('sh-yv').textContent=y+'px';
+  document.getElementById('sh-bv').textContent=b+'px';
+  document.getElementById('sh-sv').textContent=s+'px';
+  const shadow=`${x}px ${y}px ${b}px ${s}px ${c}`;
+  document.getElementById('sh-prev').style.boxShadow=shadow;
+  document.getElementById('sh-res').innerHTML=`<div style="font-size:12px;color:var(--accent3)">box-shadow: ${shadow};</div>`;
+  document.getElementById('sh-res').style.display='block';
+}
+function updateCSSBtn(){
+  const txt=gvs('cbtn-txt')||'Click Me',bg=gvs('cbtn-bg'),tc=gvs('cbtn-tc'),r=gvs('cbtn-r'),fs=gvs('cbtn-fs');
+  const style=`background:${bg};color:${tc};border-radius:${r}px;font-size:${fs}px;padding:10px 24px;border:none;cursor:pointer;font-weight:600;`;
+  document.getElementById('cbtn-prev').innerHTML=`<button style="${style}">${txt}</button>`;
+  document.getElementById('cbtn-res').innerHTML=`<div style="font-size:11px;color:var(--accent3);line-height:2">.btn {\n  background: ${bg};\n  color: ${tc};\n  border-radius: ${r}px;\n  font-size: ${fs}px;\n  padding: 10px 24px;\n  border: none;\n  cursor: pointer;\n}</div>`;
+  document.getElementById('cbtn-res').style.display='block';
+}
+function calcAR(){
+  const w=gv('ar-w'),h=gv('ar-h'),mode=gvs('ar-mode'),nw=gv('ar-nw');
+  if(isNaN(w)||isNaN(h))return;
+  const g=gcd(Math.round(w),Math.round(h));
+  if(mode==='find'){showRes('ar-res',`${Math.round(w/g)} : ${Math.round(h/g)}`,[['Ratio',`${Math.round(w/g)}:${Math.round(h/g)}`],['Decimal',fmt(w/h)]]);}
+  else{if(isNaN(nw))return;showRes('ar-res',`${nw} × ${fmt(nw*h/w)}`,[['New Height',fmt(nw*h/w)]]);}
+}
+
+// ─── SOCIAL ───────────────────────────────────────────────────────────────────
+function calcYT(){
+  const views=gv('yt-views'),cpm=gv('yt-cpm');
+  if(isNaN(views))return;
+  const monthly=views/1000*cpm*0.55;
+  showRes('yt-res',fmtINR(monthly)+'/month',[['Annual Estimate',fmtINR(monthly*12)],['Per 1000 Views',fmtINR(cpm*0.55)]]);
+}
+function calcIG(){
+  const f=gv('ig-followers'),l=gv('ig-likes'),c=gv('ig-comments');
+  if([f,l,c].some(isNaN)||f===0)return;
+  const rate=(l+c)/f*100;
+  const level=rate<1?'Low':rate<3?'Average':rate<6?'Good':'Excellent';
+  showRes('ig-res',`${fmt(rate)}%`,[['Benchmark',level],['Interactions/post',fmt(l+c)]]);
+}
+function genUsername(){
+  const k=gvs('un-key').toLowerCase().replace(/\s+/g,'');
+  if(!k)return;
+  const y=new Date().getFullYear();
+  const nums=[Math.floor(Math.random()*999),Math.floor(Math.random()*9999)];
+  const prefixes=['the','real','its','hey','im','just'];
+  const suffixes=['_official','_hq','pro','x','_co','hub','zone','io'];
+  const results=[k+nums[0],k+'_'+nums[1],prefixes[Math.floor(Math.random()*prefixes.length)]+k,k+suffixes[Math.floor(Math.random()*suffixes.length)],k+'.'+suffixes[Math.floor(Math.random()*suffixes.length)],k+y,k+'official',k+'_real'];
+  const el=document.getElementById('un-res');
+  el.innerHTML=results.map(u=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--accent3)">@${u}</div>`).join('');
+  el.style.display='block';
+}
+const MALE_NAMES=['Arjun','Rahul','Aditya','Kiran','Dev','Rohan','Siddharth','Nikhil','Vivek','Ajay','Ankur','Pranav','Harsh','Yash','Akash','Liam','Ethan','Noah','Mason','Logan','Oliver','James','Henry','Lucas','Jack'];
+const FEMALE_NAMES=['Priya','Sneha','Anjali','Divya','Neha','Pooja','Kavya','Shreya','Ananya','Isha','Riya','Meera','Tanvi','Aisha','Leela','Emma','Olivia','Ava','Sophia','Mia','Isabella','Charlotte','Harper','Amelia','Ella'];
+function genNames(){
+  const g=gvs('ng-g'),cnt=parseInt(gvs('ng-count'))||10;
+  let pool=g==='Male'?MALE_NAMES:g==='Female'?FEMALE_NAMES:[...MALE_NAMES,...FEMALE_NAMES];
+  const surnames=['Sharma','Patel','Kumar','Singh','Verma','Gupta','Shah','Joshi','Nair','Reddy','Smith','Johnson','Williams','Brown','Jones','Davis','Miller','Wilson'];
+  const results=Array.from({length:cnt},()=>pool[Math.floor(Math.random()*pool.length)]+' '+surnames[Math.floor(Math.random()*surnames.length)]);
+  const el=document.getElementById('ng-res');
+  el.innerHTML=results.map(n=>`<div style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">${n}</div>`).join('');
+  el.style.display='block';
+}
+function validateEmail(){
+  const email=gvs('ev-email');
+  const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const valid=re.test(email);
+  showRes('ev-res',valid?'✅ Valid Email':'❌ Invalid Email',[['Format',valid?'Correct':'Incorrect'],['Domain',email.split('@')[1]||'—']]);
+}
+
+// ─── PRODUCTIVITY ─────────────────────────────────────────────────────────────
+let todos=JSON.parse(localStorage.getItem('ch-todos')||'[]');
+function addTodo(){
+  const inp=document.getElementById('todo-input');
+  const txt=inp.value.trim();if(!txt)return;
+  todos.push({text:txt,done:false,id:Date.now()});
+  localStorage.setItem('ch-todos',JSON.stringify(todos));
+  inp.value='';renderTodos();
+}
+function toggleTodo(id){todos=todos.map(t=>t.id===id?{...t,done:!t.done}:t);localStorage.setItem('ch-todos',JSON.stringify(todos));renderTodos();}
+function deleteTodo(id){todos=todos.filter(t=>t.id!==id);localStorage.setItem('ch-todos',JSON.stringify(todos));renderTodos();}
+function renderTodos(){
+  const ul=document.getElementById('todo-list');if(!ul)return;
+  ul.innerHTML=todos.map(t=>`<li class="todo-item ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})"><span>${t.text}</span><button class="todo-del" onclick="deleteTodo(${t.id})">×</button></li>`).join('');
+}
+let cdInterval=null;
+function startCountdown(){
+  const target=new Date(gvs('cd-target'));
+  if(!target)return;
+  if(cdInterval)clearInterval(cdInterval);
+  cdInterval=setInterval(()=>{
+    const now=new Date(),diff=target-now;
+    if(diff<=0){clearInterval(cdInterval);document.getElementById('cd-display').textContent='00:00:00:00';return;}
+    const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+    document.getElementById('cd-display').textContent=`${String(d).padStart(2,'0')}:${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+let swRunning=false,swStart=0,swElapsed=0,swInterval=null,lapCount=0;
+function swToggle(){
+  swRunning=!swRunning;
+  if(swRunning){swStart=Date.now()-swElapsed;swInterval=setInterval(swUpdate,50);document.getElementById('sw-start').textContent='Pause';}
+  else{clearInterval(swInterval);document.getElementById('sw-start').textContent='Resume';}
+}
+function swUpdate(){
+  swElapsed=Date.now()-swStart;
+  const ms=swElapsed%1000,s=Math.floor(swElapsed/1000)%60,m=Math.floor(swElapsed/60000);
+  document.getElementById('sw-display').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(3,'0').slice(0,3)}`;
+}
+function swLap(){
+  if(!swRunning)return;lapCount++;
+  const el=document.getElementById('sw-laps');
+  const li=document.createElement('li');
+  li.textContent=`Lap ${lapCount}: ${document.getElementById('sw-display').textContent}`;
+  li.style.cssText='padding:4px 0;border-bottom:1px solid var(--border)';
+  el.prepend(li);
+}
+function swReset(){clearInterval(swInterval);swRunning=false;swElapsed=0;lapCount=0;document.getElementById('sw-display').textContent='00:00.000';document.getElementById('sw-start').textContent='Start';document.getElementById('sw-laps').innerHTML='';}
+let pomRunning=false,pomInterval=null,pomSec=25*60,pomMode='focus';
+function pomToggle(){
+  pomRunning=!pomRunning;
+  if(pomRunning){pomInterval=setInterval(pomTick,1000);document.getElementById('pom-start').textContent='Pause';}
+  else{clearInterval(pomInterval);document.getElementById('pom-start').textContent='Resume';}
+}
+function pomTick(){pomSec--;pomUpdateDisplay();if(pomSec<=0){clearInterval(pomInterval);pomRunning=false;alert('Timer done!');}}
+function pomUpdateDisplay(){const m=Math.floor(pomSec/60),s=pomSec%60;document.getElementById('pom-display').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+function pomReset(){clearInterval(pomInterval);pomRunning=false;document.getElementById('pom-start').textContent='Start';pomUpdateDisplay();}
+function pomSetMode(mode,min){pomMode=mode;pomSec=min*60;clearInterval(pomInterval);pomRunning=false;document.getElementById('pom-start').textContent='Start';document.getElementById('pom-mode').textContent=mode.toUpperCase();pomUpdateDisplay();}
+
+// ─── TYPING TEST ──────────────────────────────────────────────────────────────
+const TYPING_TEXTS=['The quick brown fox jumps over the lazy dog near the river bank on a sunny afternoon.','Success is not final failure is not fatal it is the courage to continue that counts.','In the middle of every difficulty lies opportunity and the key is to never stop learning.','The only way to do great work is to love what you do and believe in your abilities.'];
+let typingTarget='',typingStart=null,typingInterval=null;
+function newTypingText(){
+  typingTarget=TYPING_TEXTS[Math.floor(Math.random()*TYPING_TEXTS.length)];
+  const el=document.getElementById('typing-text');
+  el.innerHTML=typingTarget.split('').map((c,i)=>`<span id="tc${i}">${c==' '?'&nbsp;':c}</span>`).join('');
+  const inp=document.getElementById('typing-input');
+  if(inp){inp.value='';inp.focus();}
+  typingStart=null;clearInterval(typingInterval);
+  document.getElementById('wpm-val').textContent='0';
+  document.getElementById('acc-val').textContent='100%';
+  document.getElementById('typ-time').textContent='0s';
+}
+function typingInput(){
+  const inp=document.getElementById('typing-input');if(!inp)return;
+  const val=inp.value;
+  if(!typingStart&&val.length>0){
+    typingStart=Date.now();
+    typingInterval=setInterval(()=>{
+      const elapsed=(Date.now()-typingStart)/1000;
+      document.getElementById('typ-time').textContent=Math.round(elapsed)+'s';
+    },1000);
+  }
+  let correct=0;
+  for(let i=0;i<typingTarget.length;i++){
+    const span=document.getElementById('tc'+i);if(!span)continue;
+    span.className=i<val.length?(val[i]===typingTarget[i]?'correct':'wrong'):(i===val.length?'current':'');
+    if(i<val.length&&val[i]===typingTarget[i])correct++;
+  }
+  const elapsed=(Date.now()-typingStart)/1000||1;
+  const words=val.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('wpm-val').textContent=Math.round(words/(elapsed/60));
+  document.getElementById('acc-val').textContent=Math.round(correct/Math.max(val.length,1)*100)+'%';
+  if(val.length>=typingTarget.length)clearInterval(typingInterval);
+}
+
+// ─── FUN ──────────────────────────────────────────────────────────────────────
+function calcLove(){
+  const a=gvs('lc-a').trim(),b=gvs('lc-b').trim();
+  if(!a||!b)return;
+  let seed=0;[...a.toLowerCase(),...b.toLowerCase()].forEach(c=>seed+=c.charCodeAt(0));
+  const pct=(seed*7+a.length*b.length*3)%100||42;
+  const msgs=['Just friends 🙂','Some spark 🌟','Great potential 💫','Strong match 💕','Soulmates ❤️‍🔥'];
+  const msg=msgs[Math.floor(pct/20)];
+  const el=document.getElementById('lc-res');
+  el.style.display='block';
+  document.getElementById('lc-pct').textContent=pct+'%';
+  document.getElementById('lc-msg').textContent=msg;
+  setTimeout(()=>document.getElementById('lc-fill').style.width=pct+'%',100);
+}
+const DICE_EMOJIS={1:'⚀',2:'⚁',3:'⚂',4:'⚃',5:'⚄',6:'⚅'};
+function rollDice(){
+  const type=parseInt(gvs('dice-type')),cnt=parseInt(gvs('dice-count'))||1;
+  const face=document.getElementById('dice-face');
+  face.classList.add('rolling');setTimeout(()=>face.classList.remove('rolling'),300);
+  const rolls=Array.from({length:cnt},()=>Math.floor(Math.random()*type)+1);
+  face.textContent=cnt===1&&type===6?DICE_EMOJIS[rolls[0]]:'🎲';
+  showRes('dice-res',`Total: ${rolls.reduce((a,b)=>a+b,0)}`,[['Rolls',rolls.join(', ')],['Dice',`${cnt}d${type}`]]);
+}
+function randPick(){
+  const items=gvs('rp-items').split('\n').map(s=>s.trim()).filter(Boolean);
+  const cnt=Math.min(parseInt(gvs('rp-count'))||1,items.length);
+  if(!items.length)return;
+  const shuffled=[...items].sort(()=>Math.random()-0.5);
+  showRes('rp-res',shuffled.slice(0,cnt).join(', '),[['From pool',items.length+' items']]);
+}
+
+// ─── SPIN WHEEL ───────────────────────────────────────────────────────────────
+let wheelAngle=0,wheelSpinning=false;
+const WHEEL_COLORS=['#7c6aff','#ff6a9b','#6affd4','#ffd46a','#6aaeff','#ff9e6a','#c46aff','#6aff8e'];
+function drawWheel(){
+  const canvas=document.getElementById('wheel-canvas');if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const items=gvs('wheel-items').split(',').map(s=>s.trim()).filter(Boolean);
+  if(!items.length)return;
+  const arc=2*Math.PI/items.length,cx=150,cy=150,r=140;
+  ctx.clearRect(0,0,300,300);
+  items.forEach((item,i)=>{
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,wheelAngle+arc*i,wheelAngle+arc*(i+1));
+    ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
+    ctx.strokeStyle='#0a0a0f';ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle+arc*i+arc/2);
+    ctx.textAlign='right';ctx.fillStyle='#fff';ctx.font='bold 13px Syne,sans-serif';
+    ctx.fillText(item.length>12?item.slice(0,12)+'…':item,r-10,5);ctx.restore();
+  });
+  ctx.beginPath();ctx.arc(cx,cy,12,0,2*Math.PI);ctx.fillStyle='#0a0a0f';ctx.fill();
+  ctx.beginPath();ctx.moveTo(290,cy-10);ctx.lineTo(300,cy);ctx.lineTo(290,cy+10);ctx.fillStyle='#ff6a9b';ctx.fill();
+}
+function spinWheel(){
+  if(wheelSpinning)return;wheelSpinning=true;
+  const items=gvs('wheel-items').split(',').map(s=>s.trim()).filter(Boolean);
+  const spins=Math.PI*2*(5+Math.random()*5)+Math.random()*Math.PI*2;
+  const duration=4000,start=Date.now(),startAngle=wheelAngle;
+  function animate(){
+    const elapsed=Date.now()-start,progress=Math.min(elapsed/duration,1);
+    const ease=1-Math.pow(1-progress,4);
+    wheelAngle=startAngle+spins*ease;
+    drawWheel();
+    if(progress<1)requestAnimationFrame(animate);
+    else{
+      wheelSpinning=false;
+      const arc=2*Math.PI/items.length;
+      const normalized=((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+      const idx=Math.floor(((2*Math.PI-normalized)%(2*Math.PI))/arc)%items.length;
+      showRes('wheel-res','🎉 '+items[idx],[]);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+// ─── ENGINEERING ──────────────────────────────────────────────────────────────
+function calcOhm(){
+  const v=gv('ohm-v'),i=gv('ohm-i'),r=gv('ohm-r');
+  const known=[!isNaN(v),!isNaN(i),!isNaN(r)].filter(Boolean).length;
+  if(known<2)return;
+  if(isNaN(v))showRes('ohm-res',`V = ${fmt(i*r)} V`,[['I × R',`${i} × ${r}`]]);
+  else if(isNaN(i))showRes('ohm-res',`I = ${fmt(v/r)} A`,[['V / R',`${v} / ${r}`]]);
+  else showRes('ohm-res',`R = ${fmt(v/i)} Ω`,[['V / I',`${v} / ${i}`]]);
+}
+function calcVC(){
+  const solve=gvs('vc-solve'),v1=gv('vc-v1'),v2=gv('vc-v2');
+  if(isNaN(v1)||isNaN(v2))return;
+  const labels={v:['Current (A)','Resistance (Ω)'],i:['Voltage (V)','Resistance (Ω)'],r:['Voltage (V)','Current (A)'],p:['Voltage (V)','Current (A)']};
+  let res;
+  if(solve==='v')res=`V = ${fmt(v1*v2)} V`;
+  else if(solve==='i')res=`I = ${fmt(v1/v2)} A`;
+  else if(solve==='r')res=`R = ${fmt(v1/v2)} Ω`;
+  else res=`P = ${fmt(v1*v2)} W`;
+  showRes('vc-res',res,[]);
+}
+function calcForce(){
+  const m=gv('force-m'),a=gv('force-a'),f=gv('force-f');
+  if(!isNaN(m)&&!isNaN(a))showRes('force-res',`F = ${fmt(m*a)} N`,[['m × a',`${m} × ${a}`]]);
+  else if(!isNaN(f)&&!isNaN(a))showRes('force-res',`m = ${fmt(f/a)} kg`,[]);
+  else if(!isNaN(f)&&!isNaN(m))showRes('force-res',`a = ${fmt(f/m)} m/s²`,[]);
+}
+function calcDensity(){
+  const m=gv('den-m'),v=gv('den-v'),d=gv('den-d');
+  if(!isNaN(m)&&!isNaN(v))showRes('den-res',`ρ = ${fmt(m/v)} kg/m³`,[]);
+  else if(!isNaN(d)&&!isNaN(v))showRes('den-res',`m = ${fmt(d*v)} kg`,[]);
+  else if(!isNaN(d)&&!isNaN(m))showRes('den-res',`V = ${fmt(m/d)} m³`,[]);
+}
+function calcPressureSci(){
+  const f=gv('pr-f'),a=gv('pr-a'),p=gv('pr-p');
+  if(!isNaN(f)&&!isNaN(a))showRes('prsci-res',`P = ${fmt(f/a)} Pa`,[]);
+  else if(!isNaN(p)&&!isNaN(a))showRes('prsci-res',`F = ${fmt(p*a)} N`,[]);
+  else if(!isNaN(p)&&!isNaN(f))showRes('prsci-res',`A = ${fmt(f/p)} m²`,[]);
+}
+function calcWork(){
+  const f=gv('we-f'),d=gv('we-d'),w=gv('we-w');
+  if(!isNaN(f)&&!isNaN(d))showRes('we-res',`W = ${fmt(f*d)} J`,[]);
+  else if(!isNaN(w)&&!isNaN(d))showRes('we-res',`F = ${fmt(w/d)} N`,[]);
+  else if(!isNaN(w)&&!isNaN(f))showRes('we-res',`d = ${fmt(w/f)} m`,[]);
+}
+function calcMotion(){
+  const u=gv('mot-u'),a=gv('mot-a'),t=gv('mot-t');
+  if([u,a,t].some(isNaN))return;
+  const v=u+a*t,s=u*t+0.5*a*t*t;
+  showRes('mot-res',`v = ${fmt(v)} m/s`,[['Distance s',`${fmt(s)} m`],['v² = u² + 2as',`${fmt(v*v)} = ${fmt(u*u+2*a*s)}`]]);
+}
+
+// ─── REAL LIFE ────────────────────────────────────────────────────────────────
+function calcAge(){
+  const dob=new Date(gvs('age-dob'));if(!dob.getFullYear())return;
+  const now=new Date();
+  let y=now.getFullYear()-dob.getFullYear(),m=now.getMonth()-dob.getMonth(),d=now.getDate()-dob.getDate();
+  if(d<0){m--;d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
+  if(m<0){y--;m+=12;}
+  const totalDays=Math.floor((now-dob)/86400000);
+  showRes('age-res',`${y} years`,[[`${m} months ${d} days`,''],['Total Days',totalDays.toLocaleString()],['Next Birthday',nextBirthday(dob)]]);
+}
+function nextBirthday(dob){
+  const now=new Date(),next=new Date(now.getFullYear(),dob.getMonth(),dob.getDate());
+  if(next<now)next.setFullYear(now.getFullYear()+1);
+  const days=Math.ceil((next-now)/86400000);
+  return `${days} days away`;
+}
+function calcDateDiff(){
+  const s=new Date(gvs('dd-start')),e=new Date(gvs('dd-end'));
+  if(!s.getTime()||!e.getTime())return;
+  const diff=Math.abs(e-s);
+  const d=Math.floor(diff/86400000),w=Math.floor(d/7),m=Math.floor(d/30.44),y=Math.floor(d/365.25);
+  showRes('datediff-res',`${d} days`,[['Weeks',w],['Months',m],['Years',y]]);
+}
+function convTZ(){
+  const time=gvs('tz-time'),offset=gv('tz-sel');
+  if(!time)return;
+  const [h,m]=time.split(':').map(Number);
+  const el=document.getElementById('tz-res');
+  const zones=[{name:'UTC',o:0},{name:'IST',o:5.5},{name:'CST',o:8},{name:'EST',o:-5},{name:'PST',o:-8},{name:'CET',o:1},{name:'JST',o:9},{name:'BRT',o:-3}];
+  const baseMin=h*60+m-offset*60;
+  el.innerHTML=zones.map(z=>{
+    const local=((baseMin+z.o*60)%(24*60)+24*60)%(24*60);
+    const hh=Math.floor(local/60),mm=local%60;
+    return `<div class="result-row"><span>${z.name}</span><span>${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}</span></div>`;
+  }).join('');
+  el.style.display='block';
+}
+function calcTip(){
+  const bill=gv('tip-bill'),pct=gv('tip-pct');
+  if(isNaN(bill))return;
+  const tip=bill*pct/100;
+  showRes('tip-res',`Total: ${fmt(bill+tip)}`,[['Tip Amount',fmt(tip)],['Tip %',pct+'%']]);
+}
+function calcSplit(){
+  const bill=gv('sb-bill'),ppl=gv('sb-people'),tip=gv('sb-tip');
+  if([bill,ppl].some(isNaN)||ppl===0)return;
+  const total=bill*(1+tip/100),perPerson=total/ppl;
+  showRes('sb-res',`${fmt(perPerson)} per person`,[['Total with Tip',fmt(total)],['Tip Amount',fmt(bill*tip/100)]]);
+}
+function calcCooking(){
+  const v=gv('cook-val'),from=gvs('cook-from');
+  if(isNaN(v))return;
+  const toMl={cup:236.588,tbsp:14.787,tsp:4.929,ml:1,L:1000};
+  const toG={oz:28.3495,lb:453.592,g:1,kg:1000};
+  const el=document.getElementById('cook-res');
+  let rows=[];
+  if(toMl[from]){const ml=v*toMl[from];rows=[['mL',fmt(ml)],['L',fmt(ml/1000)],['cup',fmt(ml/236.588)],['tbsp',fmt(ml/14.787)],['tsp',fmt(ml/4.929)]];}
+  else if(toG[from]){const g=v*toG[from];rows=[['g',fmt(g)],['kg',fmt(g/1000)],['oz',fmt(g/28.3495)],['lb',fmt(g/453.592)]];}
+  el.innerHTML=`<div class="result-main">${v} ${from}</div>`+rows.map(([l,val])=>`<div class="result-row"><span>${l}</span><span>${val}</span></div>`).join('');
+  el.style.display='block';
+}
+function calcFuelCost(){
+  const d=gv('fc-dist'),eff=gv('fc-eff'),price=gv('fc-price');
+  if([d,eff,price].some(isNaN)||eff===0)return;
+  const liters=d/eff,cost=liters*price;
+  showRes('fc-res',fmtINR(cost),[['Fuel Needed',`${fmt(liters)} L`],['Cost per km',fmtINR(cost/d)]]);
+}
+function calcTravelTime(){
+  const d=gv('tt-dist'),s=gv('tt-speed');
+  if([d,s].some(isNaN)||s===0)return;
+  const hrs=d/s,h=Math.floor(hrs),m=Math.round((hrs-h)*60);
+  showRes('tt-res',`${h}h ${m}m`,[['Distance',d+' km'],['Speed',s+' km/h']]);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+buildSidebar();
+renderHome();
+</script>
+</body>
+</html>
